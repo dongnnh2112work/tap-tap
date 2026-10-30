@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Tap Tap — Khám Phá Thẻ Thú 3D</title>
+
+  <!-- Google Fonts: Baloo 2 + Be Vietnam Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GSAP from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --bg-top: #fdf8ee;
+      --bg-bottom: #f3e9d2;
+      --theme-pastel: #f4e894;
+      --theme-accent: #d97724;
+      --theme-glow: rgba(244, 232, 148, 0.65);
+      --ink-dark: #2c221e;
+      --ink-muted: #6e5d53;
+      --card-cream: #fffdf8;
+      --card-back-cream: #faf1de;
+      --card-border: #efe6d5;
+      --glare-x: 50%;
+      --glare-y: 50%;
+      --glare-angle: 135deg;
+      --glare-opacity: 0.22;
+      --shadow-x: 0px;
+      --shadow-y: 22px;
+      --shadow-blur: 38px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink-dark);
+      background: radial-gradient(circle at 50% 38%, var(--theme-glow) 0%, transparent 62%),
+                  linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      transition: background 0.55s ease;
+      touch-action: none;
+    }
+
+    /* Subtle tactile paper grain across the viewport */
+    .ambient-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      background-image: radial-gradient(rgba(44, 34, 30, 0.06) 1px, transparent 0);
+      background-size: 18px 18px;
+    }
+
+    /* Ambient floating gouache blob behind the card */
+    .ambient-halo {
+      position: fixed;
+      left: 50%;
+      top: 46%;
+      width: 340px;
+      height: 340px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--theme-pastel);
+      filter: blur(56px);
+      opacity: 0.58;
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.5s ease;
+    }
+
+    /* Full viewport app shell optimized for 390x844 mobile-first */
+    .app-shell {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      height: 100dvh;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: max(12px, env(safe-area-inset-top)) 16px max(14px, env(safe-area-inset-bottom));
+    }
+
+    /* Top Bar: Brand + Collection Counter + Sensor / Demo Controls */
+    .top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .top-row-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 253, 248, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(44, 34, 30, 0.08);
+      padding: 6px 12px 6px 9px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(44, 34, 30, 0.06);
+    }
+
+    .brand-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--theme-accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      transition: background 0.4s ease;
+    }
+
+    .brand-name {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--ink-dark);
+    }
+
+    .collection-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #2c221e;
+      color: #fffdf8;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1;
+      box-shadow: 0 6px 16px rgba(44, 34, 30, 0.16);
+    }
+
+    .collection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--theme-pastel);
+      transition: background 0.4s ease;
+    }
+
+    /* Sub-bar for Gyro permission & Desktop Auto-Demo toggle */
+    .top-row-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tool-chip {
+      appearance: none;
+      border: 1px solid rgba(44, 34, 30, 0.12);
+      background: rgba(255, 253, 248, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--ink-dark);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(44, 34, 30, 0.05);
+    }
+
+    .tool-chip:hover {
+      background: #fffdf8;
+      transform: translateY(-1px);
+    }
+
+    .tool-chip:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    .tool-chip.is-active {
+      background: var(--theme-accent);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(217, 119, 36, 0.3);
+    }
+
+    .tool-chip .status-led {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #b5a79b;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tool-chip.is-active .status-led {
+      background: #fff;
+      box-shadow: 0 0 6px #fff;
+    }
+
+    /* Center Stage: NFC Ripple + 3D Card Perspective Container */
+    .stage-area {
+      position: relative;
+      flex: 1;
+      display: flex;
+       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      perspective: 1100px;
+      -webkit-perspective: 1100px;
+      min-height: 0;
+      z-index: 5;
+    }
+
+    /* NFC Ripple Origin Layer */
+    .nfc-ripple-stage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px;
+      height: 280px;
+      pointer-events: none;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .nfc-ring {
+      position: absolute;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 2.5px solid var(--theme-accent);
+      background: radial-gradient(circle, var(--theme-glow) 0%, transparent 70%);
+      opacity: 0;
+      transform: scale(0.4);
+    }
+
+    .nfc-core-badge {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #fffdf8;
+      border: 2px solid var(--theme-accent);
+      box-shadow: 0 12px 28px rgba(44, 34, 30, 0.16);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--theme-accent);
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .nfc-core-badge span {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      color: var(--ink-dark);
+    }
+
+    /* Confetti particles around card reveal */
+    .particles-layer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .mote {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--theme-accent);
+      opacity: 0;
+    }
+
+    /* 3D Card Wrapper: handles fly-in position/scale while inner .card-rotator handles tilt + flip */
+    .card-fly-wrapper {
+      position: relative;
+      z-index: 4;
+      width: min(78vw, 304px);
+      aspect-ratio: 1696 / 2528;
+      max-height: calc(100dvh - 228px);
+      width: auto;
+      height: min(63dvh, 456px);
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .card-fly-wrapper:active {
+      cursor: grabbing;
+    }
+
+    /* Dynamic Ground Shadow that responds to 3D tilt */
+    .card-ground-shadow {
+      position: absolute;
+      inset: 5% 6%;
+      border-radius: 30px;
+      background: rgba(36, 25, 18, 0.26);
+      filter: blur(var(--shadow-blur));
+      transform: translate3d(var(--shadow-x), var(--shadow-y), -48px) scale(0.95);
+      transition: background 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Card 3D Rotator (combines interactive tilt rotateX/rotateY + 180deg flip) */
+    .card-rotator {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* Physical Card Edge Thickness Layers */
+    .card-edge-plate {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      background: #e6dac6;
+      transform: translateZ(-2px);
+      pointer-events: none;
+    }
+
+    /* Shared Face Styles (Front & Back) */
+    .card-face,
+    .card-face * {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      background: var(--card-cream);
+      box-shadow:
+        inset 0 0 0 1.5px rgba(255, 255, 255, 0.92),
+        inset 0 0 0 3px rgba(44, 34, 30, 0.06),
+        0 2px 6px rgba(44, 34, 30, 0.08);
+      overflow: hidden;
+    }
+
+    /* ================= FRONT FACE ================= */
+    .card-face-front {
+      transform: rotateY(0deg) translateZ(2px);
+      background: #ffffff;
+    }
+
+    /* Layer 1: Parallax Gouache Art Layer */
+    .card-art-viewport {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      overflow: hidden;
+      background: #ffffff;
+      transform: translateZ(0px);
+    }
+
+    /*
+      The source PNGs (1696x2528) contain a white polaroid card at:
+      x: 6.72%..93.28% (width 86.56%), y: 5.70%..94.78% (height 89.08%).
+      Expanding the image to 115.5% width & 112.2% height crops out the baked-in outer PNG shadow
+      so our real-time 3D card frame IS the physical card edge, and shifting it gives pure art parallax!
+    */
+    .card-art-img {
+      position: absolute;
+      width: 115.5%;
+      height: 112.3%;
+      left: -7.75%;
+      top: -5.8%;
+      object-fit: cover;
+      pointer-events: none;
+      will-change: transform;
+      transform: translate3d(0px, 0px, 0px) scale(1.02);
+      filter: contrast(1.02) saturate(1.03);
+    }
+
+    /* Layer 2: Tactile Matte Paper Cutout Frame & Inner Bevel Window (Parallax Layer vs Art) */
+    .card-paper-frame {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      pointer-events: none;
+      will-change: transform;
+      /* Frame window cutout around the gouache art using box-shadow & border */
+      box-shadow:
+        inset 0 0 0 14px #ffffff,
+        inset 0 0 0 15.5px rgba(44, 34, 30, 0.07);
+    }
+
+    /* Recessed inner window bevel around the gouache illustration */
+    .art-window-bevel {
+      position: absolute;
+      left: 6.4%;
+      right: 6.4%;
+      top: 4.6%;
+      bottom: 22.2%;
+      border-radius: 10px;
+      pointer-events: none;
+      box-shadow:
+        inset 0 2px 5px rgba(44, 34, 30, 0.10),
+        inset 0 0 0 1px rgba(44, 34, 30, 0.06),
+        0 0 0 22px #ffffff;
+      transition: box-shadow 0.2s ease;
+    }
+
+    /* Top floating rarity / series micro-header on the paper frame */
+    .card-top-stamp {
+      position: absolute;
+      top: 8px;
+      left: 7%;
+      right: 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(44, 34, 30, 0.42);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Layer 3: Bottom Nameplate under the art (Parallax foreground layer) */
+    .card-caption-plate {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 23.2%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, #ffffff 28%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 14px 10px;
+      pointer-events: none;
+      will-change: transform;
+      z-index: 4;
+    }
+
+    .card-series-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--theme-pastel);
+      color: var(--ink-dark);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      transition: background 0.4s ease;
+    }
+
+    /* Animal Name under art — MUST fit one line for all 4 names */
+    .card-animal-name {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: clamp(1.22rem, 5.2vw, 1.52rem);
+      line-height: 1.15;
+      color: var(--ink-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      text-align: center;
+      letter-spacing: -0.01em;
+      text-shadow: 0 2px 0 rgba(44, 34, 30, 0.06);
+    }
+
+    .card-flip-microhint {
+      margin-top: 3px;
+      font-size: 0.66rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      opacity: 0.78;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ================= BACK FACE (180° FLIP) ================= */
+    .card-face-back {
+      transform: rotateY(180deg) translateZ(2px);
+      background: linear-gradient(165deg, #fffaf0 0%, var(--card-back-cream) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px 18px 16px;
+      text-align: center;
+    }
+
+    .back-ornament-frame {
+      position: absolute;
+      inset: 11px;
+      border-radius: 18px;
+      border: 2px dashed rgba(217, 119, 36, 0.28);
+      pointer-events: none;
+    }
+
+    .back-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .back-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2c221e;
+      color: #fffdf8;
+      padding: 7px 16px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(44, 34, 30, 0.14);
+    }
+
+    .back-logo-text {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: 1.25rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .back-subtitle {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--theme-accent);
+      margin-top: 2px;
+    }
+
+    .back-fact-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 253, 248, 0.92);
+      border: 1.5px solid rgba(44, 34, 30, 0.08);
+      border-radius: 18px;
+      padding: 16px 15px;
+      box-shadow: 0 8px 20px rgba(44, 34, 30, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-fact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--theme-pastel);
+      color: var(--ink-dark);
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 3px 12px;
+      border-radius: 999px;
+    }
+
+    .back-animal-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--ink-dark);
+      line-height: 1.15;
+    }
+
+    .back-fact-text {
+      font-size: 0.84rem;
+      line-height: 1.52;
+      color: #463831;
+      font-weight: 500;
+    }
+
+    .back-footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      margin-bottom: 2px;
+    }
+
+    /* ================= MATTE PAPER LIGHT/SHINE SWEEP & GLARE ================= */
+    /* Subtle warm paper sheen (no rainbow holo) to match gouache illustration */
+    .card-matte-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      pointer-events: none;
+      z-index: 10;
+      background:
+        radial-gradient(
+          circle at var(--glare-x) var(--glare-y),
+          rgba(255, 252, 242, 0.72) 0%,
+          rgba(255, 249, 232, 0.28) 34%,
+           rgba(255, 248, 230, 0) 68%
+        ),
+        linear-gradient(
+          var(--glare-angle),
+          rgba(255, 255, 255, 0) 20%,
+          rgba(255, 252, 240, 0.46) 48%,
+          rgba(255, 253, 245, 0.75) 50%,
+          rgba(255, 252, 240, 0.42) 52%,
+          rgba(255, 255, 255, 0) 80%
+        );
+      opacity: var(--glare-opacity);
+      mix-blend-mode: soft-light;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Warm specular rim catch-light along the tilted paper edge */
+    .card-rim-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      pointer-events: none;
+      z-index: 11;
+      background: radial-gradient(
+        circle at var(--glare-x) var(--glare-y),
+        rgba(255, 253, 246, 0.42) 0%,
+        rgba(255, 250, 235, 0.12) 42%,
+        transparent 72%
+      );
+      opacity: calc(var(--glare-opacity) * 0.85);
+    }
+
+    /* Subtle watercolor paper texture overlay on the card */
+    .card-paper-texture {
+      position: absolute;
+      inset: 0;
+      border-radius: 26px;
+      pointer-events: none;
+      z-index: 9;
+      opacity: 0.14;
+      background-image:
+        radial-gradient(rgba(92, 70, 50, 0.14) 0.75px, transparent 0),
+        radial-gradient(rgba(92, 70, 50, 0.09) 0.75px, transparent 0);
+      background-size: 12px 12px;
+      background-position: 0 0, 6px 6px;
+    }
+
+    /* Interactive Hint Pill below Stage */
+    .gesture-hint {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 253, 248, 0.74);
+      border: 1px solid rgba(44, 34, 30, 0.08);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    /* Bottom Controls: Animal Indicator Dots + 2 Main Action Buttons */
+    .bottom-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+      z-index: 6;
+    }
+
+    .animal-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .animal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(44, 34, 30, 0.18);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .animal-dot.is-active {
+      width: 24px;
+      background: var(--theme-accent);
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 16px;
+      padding: 13px 16px;
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700;
+      font-size: 1.02rem;
+      line-height: 1.1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.3s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-secondary {
+      background: #fffdf8;
+      color: var(--ink-dark);
+      border: 1.5px solid rgba(44, 34, 30, 0.14);
+      box-shadow: 0 6px 16px rgba(44, 34, 30, 0.07);
+    }
+
+    .btn-secondary:hover {
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(44, 34, 30, 0.11);
+    }
+
+    .btn-primary {
+      background: #2c221e;
+      color: #fffdf8;
+      box-shadow: 0 8px 22px rgba(44, 34, 30, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: #3d302a;
+      box-shadow: 0 10px 26px rgba(44, 34, 30, 0.28);
+    }
+
+    /* Compact height adjustments for smaller mobile viewports */
+    @media (max-height: 740px) {
+      .card-fly-wrapper {
+        height: min(58dvh, 390px);
+      }
+      .btn {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-grain"></div>
+  <div class="ambient-halo" id="ambientHalo"></div>
+
+  <main class="app-shell">
+    <!-- Top Header & Controls -->
+    <header class="top-bar">
+      <div class="top-row-main">
+        <div class="brand-pill">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8.5a6.5 6.5 0 0 1 12 0" />
+              <path d="M3 5.5a11 11 0 0 1 18 0" />
+              <circle cx="12" cy="14" r="3" fill="currentColor" />
+            </svg>
+          </div>
+          <span class="brand-name">Tap Tap</span>
+        </div>
+
+        <div class="collection-counter" id="collectionCounter" aria-live="polite">
+          <span class="collection-dot"></span>
+          <span id="counterText">Bộ sưu tập 1/15</span>
+        </div>
+      </div>
+
+      <div class="top-row-tools">
+        <!-- iOS / Mobile DeviceOrientation Gyro Permission Button -->
+        <button type="button" class="tool-chip" id="gyroBtn" title="Bật cảm biến nghiêng 3D trên điện thoại">
+          <span class="status-led"></span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+            <line x1="12" y1="18" x2="12.01" y2="18" />
+          </svg>
+          <span id="gyroBtnLabel">Cảm biến nghiêng</span>
+        </button>
+
+        <!-- Desktop Auto-Demo Mode Toggle for recording -->
+        <button type="button" class="tool-chip" id="autoDemoBtn" title="Tự động nghiêng 3D để quay video">
+          <span class="status-led"></span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          <span id="autoDemoLabel">Tự động nghiêng</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center 3D Card Stage -->
+    <section class="stage-area" id="stageArea" aria-label="Sân khấu thẻ thú 3D">
+      <!-- NFC Contactless Ripple Visual -->
+      <div class="nfc-ripple-stage" id="nfcRippleStage" aria-hidden="true">
+        <div class="nfc-ring" id="nfcRing1"></div>
+        <div class="nfc-ring" id="nfcRing2"></div>
+        <div class="nfc-ring" id="nfcRing3"></div>
+        <div class="nfc-core-badge" id="nfcCoreBadge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8.32a7.43 7.43 0 0 1 0 7.36" />
+            <path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58" />
+            <path d="M12.91 4.1a15.91 15.91 0 0 1 .01 15.8" />
+            <path d="M16.37 2a20.16 20.16 0 0 1 0 20" />
+          </svg>
+          <span>NFC TAP</span>
+        </div>
+      </div>
+
+      <!-- Subtle Gouache Confetti Burst Layer -->
+      <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
+
+      <!-- 3D Card Object -->
+      <div class="card-fly-wrapper" id="cardFlyWrapper">
+        <div class="card-ground-shadow" id="cardShadow"></div>
+
+        <div class="card-rotator" id="cardRotator">
+          <div class="card-edge-plate"></div>
+
+          <!-- FRONT SIDE -->
+          <div class="card-face card-face-front" id="cardFront">
+            <!-- Parallax Layer 1: Recessed Gouache Illustration -->
+            <div class="card-art-viewport">
+              <img
+                id="cardArtImg"
+                class="card-art-img"
+                src="./cards/capybara.png"
+                alt="Capy Chill"
+                draggable="false"
+              />
+            </div>
+
+            <!-- Parallax Layer 2: Matte Paper Cutout Frame & Bevel -->
+            <div class="card-paper-frame" id="cardPaperFrame">
+              <div class="card-top-stamp">
+                <span id="cardCodeStamp">TAP TAP • #01</span>
+                <span>★★★</span>
+              </div>
+              <div class="art-window-bevel" id="artWindowBevel"></div>
+            </div>
+
+            <!-- Parallax Layer 3: Foreground Nameplate Under Art -->
+            <div class="card-caption-plate" id="cardCaptionPlate">
+              <div class="card-series-tag" id="cardSeriesTag">Thú Cưng Sài Gòn</div>
+              <h1 class="card-animal-name" id="cardAnimalName">Capy Chill</h1>
+              <div class="card-flip-microhint">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 2.1l4 4-4 4" />
+                  <path d="M3 12.2v-2a4 4 0 0 1 4-4h14" />
+                  <path d="M7 21.9l-4-4 4-4" />
+                  <path d="M21 11.8v2a4 4 0 0 1-4 4H3" />
+                </svg>
+                <span>Chạm thẻ để lật mặt sau</span>
+              </div>
+            </div>
+
+            <!-- Matte Paper Grain & Soft Light/Glare Sweep -->
+            <div class="card-paper-texture"></div>
+            <div class="card-matte-shine"></div>
+            <div class="card-rim-glare"></div>
+          </div>
+
+          <!-- BACK SIDE (Cream back with 'Tap Tap' logo & 1 fun fact text) -->
+          <div class="card-face card-face-back" id="cardBack">
+            <div class="back-ornament-frame"></div>
+
+            <div class="back-header">
+              <div class="back-logo-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 8.5a6.5 6.5 0 0 1 12 0" />
+                  <path d="M3 5.5a11 11 0 0 1 18 0" />
+                  <circle cx="12" cy="14" r="3" fill="currentColor" />
+                </svg>
+                <span class="back-logo-text">Tap Tap</span>
+              </div>
+              <span class="back-subtitle">Thẻ Sưu Tập NFC Tương Tác</span>
+            </div>
+
+            <div class="back-fact-card" id="backFactCard">
+              <span class="back-fact-pill">✨ Sự thật thú vị</span>
+              <h2 class="back-animal-title" id="backAnimalTitle">Capy Chill</h2>
+              <p class="back-fact-text" id="backFactText">
+                Chuột lang nước Capybara là &ldquo;bậc thầy ngoại giao&rdquo; của tự nhiên — chúng hiền lành đến mức chim chóc, khỉ và cả cá sấu đều thích ngồi nghỉ chân trên lưng chúng!
+              </p>
+            </div>
+
+            <div class="back-footer">
+              <span id="backSerialText">Mã thẻ #01/15 • Phiên bản Gouache</span>
+              <span>Chạm vào thẻ để lật lại mặt trước ↻</span>
+            </div>
+
+            <!-- Matte Paper Grain & Soft Glare on Back Side too -->
+            <div class="card-paper-texture"></div>
+            <div class="card-matte-shine"></div>
+            <div class="card-rim-glare"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gesture Helper Pill -->
+      <div class="gesture-hint" id="gestureHint">
+        <span>Kéo để nghiêng 3D • Chạm thẻ để lật 180°</span>
+      </div>
+    </section>
+
+    <!-- Bottom Controls -->
+    <footer class="bottom-bar">
+      <div class="animal-dots" id="animalDots" role="tablist" aria-label="Danh sách thú">
+        <button type="button" class="animal-dot is-active" data-index="0" aria-label="Capy Chill"></button>
+        <button type="button" class="animal-dot" data-index="1" aria-label="Voi Bánh Mì"></button>
+        <button type="button" class="animal-dot" data-index="2" aria-label="Hươu Nón Lá"></button>
+        <button type="button" class="animal-dot" data-index="3" aria-label="Đười Ươi Nước Mía"></button>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" class="btn btn-secondary" id="replayTapBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          <span>Chạm lại</span>
+        </button>
+
+        <button type="button" class="btn btn-primary" id="nextAnimalBtn">
+          <span>Thú tiếp theo</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Card Data in exact required order
+      const CARDS = [
+        {
+          id: 'capybara',
+          name: 'Capy Chill',
+          image: './cards/capybara.png',
+          code: 'TAP TAP • #01',
+          serial: 'Mã thẻ #01/15 • Phiên bản Gouache',
+          series: 'Thú Cưng Sài Gòn',
+          pastel: '#f4e894',
+          accent: '#d97724',
+          glow: 'rgba(244, 232, 148, 0.68)',
+          fact: 'Chuột lang nước Capybara là “bậc thầy ngoại giao” của tự nhiên — chúng hiền lành đến mức chim chóc, khỉ và cả cá sấu đều thích ngồi nghỉ chân trên lưng chúng!'
+        },
+        {
+          id: 'elephant',
+          name: 'Voi Bánh Mì',
+          image: './cards/card_elephant.png',
+          code: 'TAP TAP • #02',
+          serial: 'Mã thẻ #02/15 • Phiên bản Gouache',
+          series: 'Ẩm Thực Đường Phố',
+          pastel: '#cde6d0',
+          accent: '#2f8568',
+          glow: 'rgba(205, 230, 208, 0.72)',
+          fact: 'Chiếc vòi của voi có tới hơn 40.000 bó cơ nhưng không có một khúc xương nào — vừa đủ khỏe để nhổ cây lớn, vừa đủ khéo để cầm gọn ổ bánh mì giòn rụm!'
+        },
+        {
+          id: 'giraffe',
+          name: 'Hươu Nón Lá',
+          image: './cards/card_giraffe.png',
+          code: 'TAP TAP • #03',
+          serial: 'Mã thẻ #03/15 • Phiên bản Gouache',
+          series: 'Dạo Phố Ngày Nắng',
+          pastel: '#ffd2b1',
+          accent: '#d95b26',
+          glow: 'rgba(255, 210, 177, 0.72)',
+          fact: 'Dù sở hữu chiếc cổ dài gần 2 mét để vươn tới tán cây cao nhất, hươu cao cổ lại có đúng 7 đốt sống cổ — bằng hệt số đốt sống cổ của con người!'
+        },
+        {
+          id: 'orangutan',
+          name: 'Đười Ươi Nước Mía',
+          image: './cards/card_orangutan.png',
+          code: 'TAP TAP • #04',
+          serial: 'Mã thẻ #04/15 • Phiên bản Gouache',
+          series: 'Giải Nhiệt Miền Nhiệt Đới',
+          pastel: '#d8cfec',
+          accent: '#6f42c1',
+          glow: 'rgba(216, 207, 236, 0.74)',
+          fact: 'Đười ươi trong tiếng Mã Lai có nghĩa là “Người Rừng”. Mỗi buổi tối, chúng biết tự đan ổ lá êm ái trên ngọn cây và dùng tàu lá lớn che mưa như một chiếc ô!'
+        }
+      ];
+
+      // Preload all 4 card images so transitions are instant
+      CARDS.forEach((c) => {
+        const img = new Image();
+        img.src = c.image;
+      });
+
+      // DOM Elements
+      const rootEl = document.documentElement;
+      const counterText = document.getElementById('counterText');
+      const collectionCounter = document.getElementById('collectionCounter');
+      const gyroBtn = document.getElementById('gyroBtn');
+      const gyroBtnLabel = document.getElementById('gyroBtnLabel');
+      const autoDemoBtn = document.getElementById('autoDemoBtn');
+      const autoDemoLabel = document.getElementById('autoDemoLabel');
+      const nfcRing1 = document.getElementById('nfcRing1');
+      const nfcRing2 = document.getElementById('nfcRing2');
+      const nfcRing3 = document.getElementById('nfcRing3');
+      const nfcCoreBadge = document.getElementById('nfcCoreBadge');
+      const particlesLayer = document.getElementById('particlesLayer');
+      const cardFlyWrapper = document.getElementById('cardFlyWrapper');
+      const cardRotator = document.getElementById('cardRotator');
+      const cardArtImg = document.getElementById('cardArtImg');
+      const cardPaperFrame = document.getElementById('cardPaperFrame');
+      const artWindowBevel = document.getElementById('artWindowBevel');
+      const cardCaptionPlate = document.getElementById('cardCaptionPlate');
+      const backFactCard = document.getElementById('backFactCard');
+      const cardCodeStamp = document.getElementById('cardCodeStamp');
+      const cardSeriesTag = document.getElementById('cardSeriesTag');
+      const cardAnimalName = document.getElementById('cardAnimalName');
+      const backAnimalTitle = document.getElementById('backAnimalTitle');
+      const backFactText = document.getElementById('backFactText');
+      const backSerialText = document.getElementById('backSerialText');
+      const replayTapBtn = document.getElementById('replayTapBtn');
+      const nextAnimalBtn = document.getElementById('nextAnimalBtn');
+      const dotButtons = Array.from(document.querySelectorAll('.animal-dot'));
+
+      // State
+      let currentIndex = 0;
+      let collectionCount = 1; // Starts at 1/15 and increases per animal
+      let isFlipped = false;
+      let isRevealing = false;
+      let isDragging = false;
+      let autoDemoActive = false;
+      let gyroActive = false;
+      let gyroBaseline = { beta: null, gamma: null };
+
+      // 3D Tilt state (degrees)
+      const tiltState = {
+        rotX: 0,
+        rotY: 0,
+        flipY: 0,
+        scale: 1
+      };
+
+      // Pointer tracking to distinguish tap (flip) vs drag (tilt)
+      let pointerDownInfo = null;
+      const MAX_TILT_DEG = 22;
+
+      // Create confetti motes for reveal burst
+      const motes = [];
+      for (let i = 0; i < 14; i++) {
+        const m = document.createElement('div');
+        m.className = 'mote';
+        particlesLayer.appendChild(m);
+        motes.push(m);
+      }
+
+      // Render current 3D transform, parallax depth (art vs frame), and matte glare
+      function renderCard3D() {
+        const rx = tiltState.rotX;
+        const ry = tiltState.rotY;
+        const totalY = ry + tiltState.flipY;
+
+        // 1. Main 3D Card rotation
+        cardRotator.style.transform =
+          `rotateX(${rx.toFixed(2)}deg) rotateY(${totalY.toFixed(2)}deg) scale3d(${tiltState.scale.toFixed(3)}, ${tiltState.scale.toFixed(3)}, 1)`;
+
+        // 2. Parallax depth: Art layer moves opposite to frame layer to create recessed 3D depth
+        const normX = Math.max(-1, Math.min(1, ry / MAX_TILT_DEG));
+        const normY = Math.max(-1, Math.min(1, -rx / MAX_TILT_DEG));
+
+        const artShiftX = -normX * 14;
+        const artShiftY = -normY * 14;
+        cardArtImg.style.transform = `translate3d(${artShiftX.toFixed(1)}px, ${artShiftY.toFixed(1)}px, 0px) scale(1.045)`;
+
+        // Frame & Foreground nameplate counter-shift for tangible depth separation
+        const frameShiftX = normX * 3.5;
+        const frameShiftY = normY * 3.5;
+        cardPaperFrame.style.transform = `translate3d(${frameShiftX.toFixed(1)}px, ${frameShiftY.toFixed(1)}px, 0px)`;
+        artWindowBevel.style.boxShadow =
+          `inset ${(-normX * 6).toFixed(1)}px ${(-normY * 6 + 2).toFixed(1)}px 8px rgba(44, 34, 30, 0.14), ` +
+          `inset 0 0 0 1px rgba(44, 34, 30, 0.07), 0 0 0 22px #ffffff`;
+
+        const captionShiftX = normX * 5.5;
+        const captionShiftY = normY * 5.5;
+        cardCaptionPlate.style.transform = `translate3d(${captionShiftX.toFixed(1)}px, ${captionShiftY.toFixed(1)}px, 0px)`;
+        backFactCard.style.transform = `translate3d(${(-normX * 5).toFixed(1)}px, ${(normY * 5).toFixed(1)}px, 0px)`;
+
+        // 3. Soft Matte Paper Light/Shine Sweep & Glare following tilt angle
+        const glareX = 50 - normX * 42;
+        const glareY = 48 - normY * 42;
+        const glareAngle = 135 + normX * 28 - normY * 18;
+        const tiltMagnitude = Math.hypot(normX, normY);
+        const glareOpacity = 0.18 + Math.min(0.42, tiltMagnitude * 0.34);
+
+        rootEl.style.setProperty('--glare-x', `${glareX.toFixed(1)}%`);
+        rootEl.style.setProperty('--glare-y', `${glareY.toFixed(1)}%`);
+        rootEl.style.setProperty('--glare-angle', `${glareAngle.toFixed(1)}deg`);
+        rootEl.style.setProperty('--glare-opacity', glareOpacity.toFixed(3));
+
+        // 4. Dynamic Ground Shadow moves opposite to card tilt
+        const shadowX = -normX * 20;
+        const shadowY = 22 + normY * 14;
+        const shadowBlur = 34 + tiltMagnitude * 10;
+        rootEl.style.setProperty('--shadow-x', `${shadowX.toFixed(1)}px`);
+        rootEl.style.setProperty('--shadow-y', `${shadowY.toFixed(1)}px`);
+        rootEl.style.setProperty('--shadow-blur', `${shadowBlur.toFixed(1)}px`);
+      }
+
+      // Apply card content & theme colors
+      function applyCardData(index) {
+        const card = CARDS[index];
+        cardArtImg.src = card.image;
+        cardArtImg.alt = card.name;
+        cardCodeStamp.textContent = card.code;
+        cardSeriesTag.textContent = card.series;
+        cardAnimalName.textContent = card.name;
+        backAnimalTitle.textContent = card.name;
+        backFactText.textContent = card.fact;
+        backSerialText.textContent = card.serial;
+
+        rootEl.style.setProperty('--theme-pastel', card.pastel);
+        rootEl.style.setProperty('--theme-accent', card.accent);
+        rootEl.style.setProperty('--theme-glow', card.glow);
+
+        dotButtons.forEach((dot, i) => {
+          dot.classList.toggle('is-active', i === index);
+        });
+      }
+
+      // Update collection counter 'Bộ sưu tập N/15'
+      function updateCollectionCounter(newCount) {
+        collectionCount = newCount;
+        counterText.textContent = `Bộ sưu tập ${collectionCount}/15`;
+        if (window.gsap) {
+          gsap.fromTo(
+            collectionCounter,
+            { scale: 1.16 },
+            { scale: 1, duration: 0.45, ease: 'back.out(2.2)' }
+          );
+        }
+      }
+
+      // Trigger Gouache Confetti Particles
+      function burstParticles(accentColor, pastelColor) {
+        if (!window.gsap) return;
+        motes.forEach((mote, i) => {
+          const angle = (i / motes.length) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+          const dist = 125 + Math.random() * 65;
+          const tx = Math.cos(angle) * dist;
+          const ty = Math.sin(angle) * dist;
+          const size = 7 + Math.round(Math.random() * 7);
+          mote.style.width = `${size}px`;
+          mote.style.height = `${size}px`;
+          mote.style.background = i % 2 === 0 ? accentColor : pastelColor;
+
+          gsap.killTweensOf(mote);
+          gsap.fromTo(
+            mote,
+            { x: 0, y: 0, scale: 0.2, opacity: 0.95 },
+            {
+              x: tx,
+              y: ty,
+              scale: 1,
+              opacity: 0,
+              duration: 0.75 + Math.random() * 0.25,
+              ease: 'power3.out'
+            }
+          );
+        });
+      }
+
+      // Play NFC Ripple + Card Fly-in with Spring Landing
+      function playNfcReveal(targetIndex, incrementCounter) {
+        isRevealing = true;
+
+        // Reset flip state to front when revealing
+        isFlipped = false;
+        if (window.gsap) {
+          gsap.killTweensOf(tiltState);
+          gsap.killTweensOf(cardFlyWrapper);
+          gsap.killTweensOf([nfcRing1, nfcRing2, nfcRing3, nfcCoreBadge]);
+        }
+
+        tiltState.rotX = 0;
+        tiltState.rotY = 0;
+        tiltState.flipY = 0;
+        tiltState.scale = 1;
+        renderCard3D();
+
+        applyCardData(targetIndex);
+        if (incrementCounter) {
+          const nextN = (collectionCount % 15) + 1;
+          updateCollectionCounter(nextN);
+        }
+
+        if (!window.gsap) {
+          isRevealing = false;
+          return;
+        }
+
+        const card = CARDS[targetIndex];
+        const tl = gsap.timeline({
+          onComplete: () => {
+            isRevealing = false;
+          }
+        });
+
+        // Hide card initially at bottom depth before NFC ripple completes
+        gsap.set(cardFlyWrapper, {
+          opacity: 0,
+          y: 230,
+          z: -260,
+          scale: 0.38,
+          rotationZ: -7
+        });
+
+        // 1. Short NFC Ripple animation
+        gsap.set([nfcRing1, nfcRing2, nfcRing3], { scale: 0.35, opacity: 0.9 });
+        gsap.set(nfcCoreBadge, { scale: 0.4, opacity: 0 });
+
+        tl.to(nfcCoreBadge, {
+          scale: 1.05,
+          opacity: 1,
+          duration: 0.18,
+          ease: 'back.out(2)'
+        }, 0);
+
+        tl.to([nfcRing1, nfcRing2, nfcRing3], {
+          scale: (i) => 2.2 + i * 0.55,
+          opacity: 0,
+          duration: 0.46,
+          stagger: 0.06,
+          ease: 'power2.out'
+        }, 0.02);
+
+        tl.to(nfcCoreBadge, {
+          scale: 0.6,
+          opacity: 0,
+          duration: 0.18,
+          ease: 'power2.in'
+        }, 0.28);
+
+        // 2. Card flies to center and lands with a 3D spring
+        tl.add(() => {
+          burstParticles(card.accent, card.pastel);
+        }, 0.24);
+
+        tl.to(cardFlyWrapper, {
+          opacity: 1,
+          duration: 0.12,
+          ease: 'none'
+        }, 0.22);
+
+        tl.to(cardFlyWrapper, {
+          y: 0,
+          z: 0,
+          scale: 1,
+          rotationZ: 0,
+          duration: 0.88,
+          ease: 'elastic.out(1, 0.58)'
+        }, 0.22);
+
+        // Add physical 3D tilt oscillation during fly-in landing so light sweeps across the card
+        tl.fromTo(
+          tiltState,
+          { rotX: 24, rotY: -22 },
+          {
+            rotX: 0,
+            rotY: 0,
+            duration: 0.92,
+            ease: 'elastic.out(1, 0.52)',
+            onUpdate: renderCard3D
+          },
+          0.22
+        );
+      }
+
+      // Smooth spring return when pointer is released
+      function springReturnToCenter() {
+        if (!window.gsap) {
+          tiltState.rotX = 0;
+          tiltState.rotY = 0;
+          tiltState.scale = 1;
+          renderCard3D();
+          return;
+        }
+        gsap.to(tiltState, {
+          rotX: 0,
+          rotY: 0,
+          scale: 1,
+          duration: 0.85,
+          ease: 'elastic.out(1, 0.5)',
+          overwrite: 'auto',
+          onUpdate: renderCard3D
+        });
+      }
+
+      // Flip card 180° between Front and Cream Back
+      function flipCard() {
+        if (isRevealing) return;
+        isFlipped = !isFlipped;
+        const targetFlipY = isFlipped ? 180 : 0;
+
+        if (!window.gsap) {
+          tiltState.flipY = targetFlipY;
+          renderCard3D();
+          return;
+        }
+
+        // Tactile lift + 180deg spring flip
+        gsap.to(tiltState, {
+          flipY: targetFlipY,
+          rotX: 0,
+          rotY: 0,
+          duration: 0.68,
+          ease: 'back.out(1.35)',
+          overwrite: 'auto',
+          onUpdate: renderCard3D
+        });
+
+        gsap.fromTo(
+          tiltState,
+          { scale: 1 },
+          {
+            scale: 1.055,
+            duration: 0.2,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power2.out',
+            onUpdate: renderCard3D
+          }
+        );
+      }
+
+      // Compute tilt from clientX/clientY relative to card bounds
+      function updateTiltFromPointer(clientX, clientY) {
+        const rect = cardFlyWrapper.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        // Normalized -1..1 from center of card (clamped softly up to ±1.25)
+        const dx = Math.max(-1.25, Math.min(1.25, (clientX - centerX) / (rect.width * 0.5)));
+        const dy = Math.max(-1.25, Math.min(1.25, (clientY - centerY) / (rect.height * 0.5)));
+
+        // Dragging right tilts right side toward viewer/light; dragging down tilts bottom
+        const targetRotY = dx * MAX_TILT_DEG;
+        const targetRotX = -dy * MAX_TILT_DEG;
+
+        if (window.gsap) {
+          gsap.to(tiltState, {
+            rotX: targetRotX,
+            rotY: targetRotY,
+            scale: 1.025,
+            duration: 0.16,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onUpdate: renderCard3D
+          });
+        } else {
+          tiltState.rotX = targetRotX;
+          tiltState.rotY = targetRotY;
+          renderCard3D();
+        }
+      }
+
+      // Pointer Events on Card (Drag to tilt in 3D, Tap to flip 180°)
+      cardFlyWrapper.addEventListener('pointerdown', (e) => {
+        if (isRevealing) return;
+        isDragging = true;
+        pointerDownInfo = {
+          x: e.clientX,
+          y: e.clientY,
+          time: performance.now(),
+          moved: false
+        };
+        try {
+          cardFlyWrapper.setPointerCapture(e.pointerId);
+        } catch (_) {}
+      });
+
+      cardFlyWrapper.addEventListener('pointermove', (e) => {
+        if (isRevealing) return;
+
+        if (isDragging && pointerDownInfo) {
+          const dist = Math.hypot(e.clientX - pointerDownInfo.x, e.clientY - pointerDownInfo.y);
+          if (dist > 7) {
+            pointerDownInfo.moved = true;
+          }
+          if (pointerDownInfo.moved) {
+            updateTiltFromPointer(e.clientX, e.clientY);
+          }
+        } else if (e.pointerType === 'mouse' && !autoDemoActive) {
+          // Responsive desktop hover tilt even without holding mouse button
+          updateTiltFromPointer(e.clientX, e.clientY);
+        }
+      });
+
+      function handlePointerEnd(e) {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const info = pointerDownInfo;
+        pointerDownInfo = null;
+
+        if (info && !info.moved && performance.now() - info.time < 450) {
+          // Clean tap on card -> flip 180°
+          flipCard();
+        } else if (!autoDemoActive) {
+          springReturnToCenter();
+        }
+      }
+
+      cardFlyWrapper.addEventListener('pointerup', handlePointerEnd);
+      cardFlyWrapper.addEventListener('pointercancel', handlePointerEnd);
+      cardFlyWrapper.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse' && !isDragging && !autoDemoActive) {
+          springReturnToCenter();
+        }
+      });
+
+      // Buttons: 'Chạm lại' & 'Thú tiếp theo'
+      replayTapBtn.addEventListener('click', () => {
+        playNfcReveal(currentIndex, false);
+      });
+
+      nextAnimalBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % CARDS.length;
+        playNfcReveal(currentIndex, true);
+      });
+
+      // Direct animal selector dots
+      dotButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.index);
+          if (idx === currentIndex) {
+            playNfcReveal(currentIndex, false);
+          } else {
+            currentIndex = idx;
+            playNfcReveal(currentIndex, true);
+          }
+        });
+      });
+
+      // ================= DEVICEORIENTATION GYRO (WITH iOS PERMISSION BUTTON) =================
+      function handleDeviceOrientation(e) {
+        if (!gyroActive || isDragging || isRevealing || autoDemoActive) return;
+        if (e.beta === null || e.gamma === null) return;
+
+        if (gyroBaseline.beta === null) {
+          gyroBaseline.beta = e.beta;
+          gyroBaseline.gamma = e.gamma;
+        }
+
+        const deltaGamma = Math.max(-30, Math.min(30, e.gamma - gyroBaseline.gamma));
+        const deltaBeta = Math.max(-30, Math.min(30, e.beta - gyroBaseline.beta));
+
+        const targetRotY = (deltaGamma / 30) * MAX_TILT_DEG;
+        const targetRotX = -(deltaBeta / 30) * MAX_TILT_DEG;
+
+        if (window.gsap) {
+          gsap.to(tiltState, {
+            rotX: targetRotX,
+            rotY: targetRotY,
+            duration: 0.22,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onUpdate: renderCard3D
+          });
+        } else {
+          tiltState.rotX = targetRotX;
+          tiltState.rotY = targetRotY;
+          renderCard3D();
+        }
+      }
+
+      async function toggleGyroPermission() {
+        if (gyroActive) {
+          gyroActive = false;
+          gyroBtn.classList.remove('is-active');
+          gyroBtnLabel.textContent = 'Cảm biến nghiêng';
+          window.removeEventListener('deviceorientation', handleDeviceOrientation);
+          springReturnToCenter();
+          return;
+        }
+
+        try {
+          if (
+            typeof DeviceOrientationEvent !== 'undefined' &&
+            typeof DeviceOrientationEvent.requestPermission === 'function'
+          ) {
+            const permission = await DeviceOrientationEvent.requestPermission();
+            if (permission !== 'granted') {
+              gyroBtnLabel.textContent = 'Từ chối cảm biến';
+              return;
+            }
+          }
+
+          gyroBaseline.beta = null;
+          gyroBaseline.gamma = null;
+          gyroActive = true;
+          gyroBtn.classList.add('is-active');
+          gyroBtnLabel.textContent = 'Đang bật nghiêng';
+          window.addEventListener('deviceorientation', handleDeviceOrientation, true);
+        } catch (_) {
+          // Fallback if browser blocks permission in non-HTTPS context
+          gyroActive = true;
+          gyroBtn.classList.add('is-active');
+          gyroBtnLabel.textContent = 'Đang bật nghiêng';
+          window.addEventListener('deviceorientation', handleDeviceOrientation, true);
+        }
+      }
+
+      gyroBtn.addEventListener('click', toggleGyroPermission);
+
+      // ================= DESKTOP AUTO-DEMO MODE FOR RECORDING =================
+      let demoRafId = null;
+      let demoStartTime = 0;
+
+      function runAutoDemoLoop(now) {
+        if (!autoDemoActive) return;
+        if (!isDragging && !isRevealing) {
+          const elapsed = (now - demoStartTime) * 0.001;
+          // Smooth Lissajous figure-8 orbital tilt for showcasing 3D parallax & matte light sweep
+          tiltState.rotY = Math.sin(elapsed * 2.1) * 18.5;
+          tiltState.rotX = Math.cos(elapsed * 1.4) * 14.5;
+          tiltState.scale = 1.02;
+          renderCard3D();
+        }
+        demoRafId = requestAnimationFrame(runAutoDemoLoop);
+      }
+
+      function toggleAutoDemo() {
+        autoDemoActive = !autoDemoActive;
+        autoDemoBtn.classList.toggle('is-active', autoDemoActive);
+        autoDemoLabel.textContent = autoDemoActive ? 'Đang chạy Demo' : 'Tự động nghiêng';
+
+        if (autoDemoActive) {
+          demoStartTime = performance.now();
+          demoRafId = requestAnimationFrame(runAutoDemoLoop);
+        } else {
+          if (demoRafId) cancelAnimationFrame(demoRafId);
+          springReturnToCenter();
+        }
+      }
+
+      autoDemoBtn.addEventListener('click', toggleAutoDemo);
+
+      // Initial NFC Tap Reveal on load
+      window.addEventListener('DOMContentLoaded', () => {
+        applyCardData(0);
+        renderCard3D();
+        setTimeout(() => {
+          playNfcReveal(0, false);
+        }, 120);
+      });
+    })();
+  </script>
+</body>
+</html>
