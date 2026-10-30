@@ -1,3 +1,5 @@
+> **Cập nhật 30/10/2026:** motion lúc chạm NFC chốt theo **A5** (Pokémon TCG Pocket, 3D Card Move Around): thẻ nghiêng 3D theo tay hoặc gyro, ánh sáng quét qua mặt thẻ, chạm để lật. Video Wrapped theo **B3**.
+
 # 05 · Motion – 2 wow moment
 
 ## 1. Lúc chạm NFC
