@@ -1,0 +1,234 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tap Tap Wrapped</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;font-family:Nunito,sans-serif;color:#2c221e;background:#fdf8ee}
+#app{position:absolute;left:50%;top:50%;width:360px;height:640px;overflow:hidden;transform-origin:50% 50%}
+.clip{background-size:700% 700%;background-repeat:no-repeat}
+#top{pointer-events:none}
+#btns{position:absolute;left:36px;right:36px;top:470px;display:flex;flex-direction:column;gap:10px;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+#btns.on{opacity:1;pointer-events:auto}
+#btns button{height:48px;border:0;border-radius:24px;font:900 16px Nunito;cursor:pointer}
+#bsave{background:#d95326;color:#fff;box-shadow:0 5px 0 #a83c18}#bshare{background:#2c221e;color:#fffdf8}
+#pz{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:65;pointer-events:none;opacity:0;font:900 40px Nunito;color:rgba(44,34,30,.5)}
+.s{position:absolute;inset:0;opacity:0;overflow:hidden}
+.paper{position:absolute;inset:0;background-image:radial-gradient(rgba(90,60,30,.06) 1px,transparent 1.3px);background-size:5px 5px;pointer-events:none;z-index:40}
+#bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:3px;z-index:60}
+#bars div{flex:1;height:3px;border-radius:2px;background:rgba(44,34,30,.18);overflow:hidden}
+#bars i{display:block;height:100%;width:0;background:#2c221e}
+#top{position:absolute;top:19px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:60;font:800 10px Nunito;color:#5a4a40}
+.demo{background:#fffdf8;color:#d95326;padding:1px 7px;border-radius:9px}
+.h{font-family:'Baloo 2';font-weight:800;line-height:1}
+.c{position:absolute;left:0;right:0;text-align:center}
+.sub{font:800 14px Nunito;color:#3d3029}
+.stk{font-family:'Baloo 2';font-weight:800;line-height:.9;-webkit-text-stroke:12px #fffdf8;paint-order:stroke fill;filter:drop-shadow(0 6px 0 rgba(44,34,30,.18))}
+.clip{position:absolute;filter:drop-shadow(0 5px 6px rgba(44,34,30,.22))}
+.wave{position:absolute;left:0;width:360px}
+.card{position:absolute;width:92px;height:120px;border-radius:12px;overflow:hidden;border:3px solid #fffdf8;box-shadow:0 8px 18px rgba(44,34,30,.22);background:#fffdf8}
+.card img{width:100%;height:100%;object-fit:cover}
+.cf{position:absolute;width:8px;height:12px;border-radius:2px;z-index:30}
+.stamp{position:absolute;width:30px;height:30px;border-radius:50%;border:2.5px dashed #8a7a2a;display:flex;align-items:center;justify-content:center;font:900 14px Nunito;color:#fffdf8}
+.pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#fffdf8;border:3px solid #d95326;font:900 12px Nunito;color:#d95326;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.btn{position:absolute;left:44px;right:44px;height:50px;border-radius:25px;background:#d95326;color:#fff;font:900 17px Nunito;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 #a83c18}
+.tag{display:inline-block;background:#2c221e;color:#f4d35e;padding:6px 14px;border-radius:14px;font-family:'Baloo 2';font-weight:800;font-size:26px}
+</style></head><body><div id="app">
+<div id="bars"></div><div id="top"><span>Tap Tap Wrapped</span><span id="x" style="pointer-events:auto;font:900 16px Nunito;padding:0 4px;cursor:pointer">✕</span></div>
+
+<!-- 0 tiger intro -->
+<div class="s" id="s0" style="background:#f6ba98">
+ <svg class="wave" style="top:0;height:200px" viewBox="0 0 360 200" preserveAspectRatio="none"><path d="M0 0H360V150Q270 190 180 160T0 170Z" fill="#f9cdb0"/><path d="M0 0H360V90Q260 130 170 100T0 110Z" fill="#fbdcc6"/></svg>
+ <img id="logo" src="a/logo.webp" style="position:absolute;left:70px;top:48px;width:220px">
+ <div class="clip" id="v0" style="left:20px;top:150px;width:320px;height:416px"></div>
+ <svg class="wave" style="bottom:0;height:150px" viewBox="0 0 360 150" preserveAspectRatio="none"><path d="M0 60Q90 20 180 55T360 45V150H0Z" fill="#e9a07a"/><path d="M0 100Q100 70 200 95T360 90V150H0Z" fill="#fdf8ee"/></svg>
+ <div class="c h" id="t0" style="top:520px;font-size:40px">Wrapped<div style="font:800 15px Nunito;color:#7a5a48;margin-top:4px">chuyến đi của bạn ở sở thú</div></div>
+</div>
+
+<!-- 1 capybara stations -->
+<div class="s" id="s1" style="background:#f2ec98">
+ <svg class="wave" style="bottom:0;height:260px" viewBox="0 0 360 260" preserveAspectRatio="none"><path d="M0 70Q120 20 230 60T360 40V260H0Z" fill="#e6dc78"/><path d="M0 160Q110 130 220 150T360 140V260H0Z" fill="#d8c95e"/></svg>
+ <div class="c sub" style="top:62px">Bạn đã tap</div>
+ <div class="c" style="top:88px"><span class="stk" id="n1" style="font-size:150px;color:#e06d2b;display:inline-block">0</span><span class="stk" style="font-size:48px;color:#2c221e">/15</span></div>
+ <div class="c" id="t1" style="top:250px"><span class="tag" style="font-size:22px"><span id="tag1">trạm · full map 🔥</span></span></div>
+ <div id="stamps"></div>
+ <div class="clip" id="v1" style="top:370px;width:200px;height:260px"></div>
+</div>
+
+<!-- 2 red panda cards -->
+<div class="s" id="s2" style="background:#c2e1f3">
+ <svg class="wave" style="bottom:0;height:240px" viewBox="0 0 360 240" preserveAspectRatio="none"><path d="M0 60Q90 20 190 50T360 30V240H0Z" fill="#a9d2ea"/><path d="M0 150Q120 115 240 140T360 130V240H0Z" fill="#8fc0de"/></svg>
+ <div class="c h" style="top:50px;font-size:30px"><span id="h2">18 thẻ. Đủ bộ.</span></div>
+ <div id="cards"></div>
+ <div class="clip" id="v2" style="left:80px;top:360px;width:200px;height:260px"></div>
+ <div class="c" id="sec" style="top:300px;z-index:20"><span class="tag" style="transform:rotate(-5deg);display:inline-block"><span id="sec2">3/3</span> thẻ bí mật 🔓</span></div>
+</div>
+
+<!-- 3 meerkat quiz -->
+<div class="s" id="s3" style="background:#f9cf9f">
+ <div class="c sub" style="top:62px">Quiz trả lời đúng</div>
+ <div class="c" style="top:90px"><span class="stk" id="n3" style="font-size:130px;color:#2f8568;display:inline-block">0</span><span class="stk" style="font-size:44px" id="qd">/60</span></div>
+ <div id="qs"></div>
+ <div class="clip" id="v3" style="left:90px;top:330px;width:200px;height:260px"></div>
+ <svg class="wave" style="bottom:0;height:150px;z-index:5" viewBox="0 0 360 150" preserveAspectRatio="none"><path d="M0 40Q90 10 180 35T360 25V150H0Z" fill="#e8b27a"/><path d="M0 90Q120 60 240 85T360 80V150H0Z" fill="#d49660"/></svg>
+ <div class="c" id="t3" style="top:572px;z-index:6"><span class="tag" style="font-size:20px">Top 8% · não to thật sự 🧠</span></div>
+</div>
+
+<!-- 4 giraffe map -->
+<div class="s" id="s4" style="background:#fbceaf">
+ <svg class="wave" style="bottom:0;height:200px" viewBox="0 0 360 200" preserveAspectRatio="none"><path d="M0 50Q90 20 180 45T360 35V200H0Z" fill="#f2b893"/></svg>
+ <div class="c h" style="top:40px;font-size:26px">Hành trình của bạn</div>
+ <div id="win" style="position:absolute;left:16px;top:78px;width:328px;height:360px;border-radius:20px;overflow:hidden;border:4px solid #fffdf8;box-shadow:0 10px 24px rgba(44,34,30,.2);background:#e9dcc0">
+  <div id="map" style="position:absolute;left:0;top:0;width:1000px;height:558px;transform-origin:0 0">
+   <img src="a/map.webp" style="width:100%;height:100%;display:block">
+   <svg viewBox="0 0 1000 558" style="position:absolute;inset:0;width:100%;height:100%"><path id="route" fill="none" stroke="#d95326" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+   <div id="pins"></div>
+  </div>
+ </div>
+ <div class="clip" id="v4" style="left:-10px;top:420px;width:170px;height:221px"></div>
+ <div style="position:absolute;left:160px;top:470px"><span class="stk" id="km" style="font-size:56px;color:#d95326">0.0</span><span class="stk" style="font-size:24px"> km</span>
+ <div class="sub" style="margin-top:6px">2h14p · 0 lần lạc</div></div>
+</div>
+
+<!-- 5 elephant badge -->
+<div class="s" id="s5" style="background:#d1ebd2">
+ <svg class="wave" style="bottom:0;height:220px" viewBox="0 0 360 220" preserveAspectRatio="none"><path d="M0 60Q100 20 200 50T360 40V220H0Z" fill="#b9dfbb"/><path d="M0 140Q120 110 240 135T360 125V220H0Z" fill="#a2d1a5"/></svg>
+ <div class="c sub" style="top:56px">Huy hiệu mới</div>
+ <div id="badge" style="z-index:35;position:absolute;left:80px;top:70px;width:200px;height:181px"><img class="tierimg" style="width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 8px rgba(44,34,30,.25))"><img id="bsh" class="tierimg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:brightness(1.8) saturate(.4);opacity:.8"></div>
+ <div class="c" id="t5" style="top:282px;z-index:35"><span class="stk" style="font-size:46px;color:#2f8568"><span id="t5t">Đủ 15 thẻ</span></span><div class="sub" style="margin-top:6px">Collector chính hiệu ✨</div></div>
+ <div id="drops"></div>
+ <div class="clip" id="v5" style="left:70px;top:380px;width:220px;height:286px"></div>
+</div>
+
+<!-- 6 reward tiger -->
+<div class="s" id="s6" style="background:#fdf8ee">
+ <svg class="wave" style="top:0;height:640px" viewBox="0 0 360 640" preserveAspectRatio="none"><path d="M0 0H360V260Q260 300 180 270T0 280Z" fill="#ffe4cf"/><path d="M0 520Q120 490 240 515T360 505V640H0Z" fill="#f4ead5"/></svg>
+ <div class="c h" style="top:44px;font-size:26px">Thẻ thưởng của bạn</div>
+ <div id="rc" style="position:absolute;left:80px;top:88px;width:200px;height:270px;border-radius:18px;overflow:hidden;border:5px solid #f4d35e;box-shadow:0 16px 34px rgba(44,34,30,.25);background:#fffdf8;z-index:5">
+  <img src="../assets/cards/art/ho-vang.webp" style="width:100%;height:100%;object-fit:cover">
+  <div id="shine" style="position:absolute;top:-20%;width:50px;height:140%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);transform:rotate(20deg)"></div>
+ </div>
+ <div class="c h" style="top:380px;font-size:22px">Hổ Bengal vàng · Hiếm</div>
+ <div class="c sub" style="top:410px">Con đầu tiên bạn gặp hôm nay</div>
+ <div id="share"></div>
+ <div class="c sub" style="top:548px;font-size:12px;color:#7a685d">#TapTapWrapped</div>
+</div>
+<div class="paper"></div><div id="pz">❚❚</div>
+<div id="btns"><button id="bsave">Lưu video</button><button id="bshare">Chia sẻ</button></div>
+</div>
+<script>
+const U=new URLSearchParams(location.search),N=Math.max(0,Math.min(15,+(U.get('n')??10))),SC=Math.max(0,Math.min(3,+(U.get('s')??1))),Q=Math.max(0,+(U.get('q')??N*3)),QT=Math.max(Q,+(U.get('qt')??45)),TIER=N>=15?15:N>=10?10:5;
+const D=[4.6,4.6,4.8,4.6,7,4.6,5];const F=[.6,.6,.6,.6,.72,.6,.6];const T0=[];let acc=0;D.forEach(d=>{T0.push(acc);acc+=d});window.TOTAL=acc;
+const CLIPS=['tiger','capy','rp','meer','gir','ele'];
+const $=id=>document.getElementById(id),cl=x=>Math.max(0,Math.min(1,x)),eo=x=>1-Math.pow(1-cl(x),3),eio=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=cl(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+D.forEach(()=>$('bars').insertAdjacentHTML('beforeend','<div><i></i></div>'));
+const COLS=['#e06d2b','#f4d35e','#2f8568','#d94e4e','#7fb7e0','#fffdf8'];
+// confetti per slide
+const CONF={};[0,1,2,5,6].forEach(k=>{CONF[k]=[];for(let i=0;i<26;i++){const e=document.createElement('div');e.className='cf';e.style.background=COLS[i%6];$('s'+k).appendChild(e);CONF[k].push({e,x:rnd()*360,vx:(rnd()-.5)*120,vy:-200-rnd()*250,r:rnd()*720,d:rnd()*.3})}});
+function confetti(k,l,ox,oy){CONF[k].forEach(p=>{const t=l-p.d;if(t<0){p.e.style.opacity=0;return}p.e.style.opacity=t>1.8?0:1;
+ const x=(ox??p.x)+p.vx*t*(ox!=null?2:1),y=(oy??-20)+ (ox!=null?p.vy*t+420*t*t: 160*t+ Math.sin(t*5+p.r)*10);p.e.style.transform=`translate(${x}px,${y}px) rotate(${p.r+t*400}deg)`})}
+// stamps (s1)
+for(let i=0;i<15;i++){$('stamps').insertAdjacentHTML('beforeend',`<div class="stamp" id="st${i}" style="left:${22+(i%8)*41}px;top:${300+Math.floor(i/8)*40+(i>=8?0:0)}px;${i>=8?'margin-left:20px':''}">✓</div>`)}
+// cards (s2)
+const arts=['voi','capybara','meerkat','huou-cao-co','ho-vang','hong-hac','gau-meo','te-giac-trang','meo-mika'];
+arts.forEach((a,i)=>$('cards').insertAdjacentHTML('beforeend',`<div class="card" id="c${i}"><img src="../assets/cards/art/${a}.webp"></div>`));
+// quiz bubbles (s3)
+const QP=[[30,250],[290,240],[20,330],[300,330],[60,410],[270,420]];QP.forEach((p,i)=>$('qs').insertAdjacentHTML('beforeend',`<div class="stamp" id="q${i}" style="left:${p[0]}px;top:${p[1]}px;width:40px;height:40px;border:none;background:#fffdf8;color:#2f8568;font-size:20px;box-shadow:0 3px 0 rgba(0,0,0,.12)">?</div>`));
+// drops (s5)
+for(let i=0;i<14;i++)$('drops').insertAdjacentHTML('beforeend',`<div id="d${i}" style="position:absolute;width:10px;height:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#7fc4e8;border:2px solid #fff"></div>`);
+// map
+const ST=[{"id": 1, "name": "Voi châu Á", "x_pct": 43, "y_pct": 60}, {"id": 2, "name": "Hươu cao cổ", "x_pct": 35, "y_pct": 63}, {"id": 3, "name": "Chuột lang nước", "x_pct": 35, "y_pct": 30}, {"id": 4, "name": "Cầy meerkat", "x_pct": 38, "y_pct": 36}, {"id": 5, "name": "Gấu chó", "x_pct": 22, "y_pct": 25}, {"id": 6, "name": "Gấu mèo", "x_pct": 70, "y_pct": 58}, {"id": 7, "name": "Tê giác trắng", "x_pct": 79, "y_pct": 31}, {"id": 8, "name": "Hổ Bengal vàng", "x_pct": 13, "y_pct": 20}, {"id": 9, "name": "Vượn má vàng", "x_pct": 18, "y_pct": 26}, {"id": 10, "name": "Hồng hạc", "x_pct": 46, "y_pct": 43}, {"id": 11, "name": "Công Ấn", "x_pct": 54, "y_pct": 38}, {"id": 12, "name": "Cá sấu", "x_pct": 13.5, "y_pct": 30}, {"id": 13, "name": "Rùa Sulcata", "x_pct": 81, "y_pct": 60}, {"id": 14, "name": "Ngựa lùn", "x_pct": 23, "y_pct": 17}, {"id": 15, "name": "Hà mã lùn", "x_pct": 30, "y_pct": 45}],ORD=[8, 12, 9, 5, 14, 3, 4, 15, 2, 1, 10, 11, 6, 13, 7];const byId={};ST.forEach(s=>byId[s.id]=s);
+const PT=ORD.map(id=>[byId[id].x_pct*10,byId[id].y_pct*5.58]);
+$('route').setAttribute('d','M'+PT.map(p=>p.join(',')).join(' L'));
+ORD.forEach((id,j)=>$('pins').insertAdjacentHTML('beforeend',`<div class="pin" id="p${j}" style="left:${PT[j][0]}px;top:${PT[j][1]}px">${j+1}</div>`));
+let RL,CUM=[0];
+function setClip(i,l){const n=Math.floor(Math.max(0,l)*12)%49;$('v'+i).style.backgroundPosition=`${(n%7)*100/6}% ${Math.floor(n/7)*100/6}%`}
+async function render(t){
+ if(!RL){const r=$('route');RL=r.getTotalLength();for(let j=1;j<PT.length;j++)CUM.push(CUM[j-1]+Math.hypot(PT[j][0]-PT[j-1][0],PT[j][1]-PT[j-1][1]));}
+ let k=D.length-1;for(let i=0;i<D.length;i++)if(t<T0[i]+D[i]){k=i;break}
+ document.querySelectorAll('#bars i').forEach((b,i)=>b.style.width=(i<k?100:i>k?0:cl((t-T0[k])/D[k])*100)+'%');
+ const P=[];
+ for(let i=0;i<D.length;i++){const s=$('s'+i),l=t-T0[i];let o=0,y=0;
+  if(l>=-0.5&&l<D[i]){o=1;y=(1-eio((l+0.5)/0.5))*640}
+  if(i==0&&l<0.5){y=0}
+  if(l>=D[i]-0.5&&i<D.length-1){o=1;y=-eio((l-D[i]+0.5)/0.5)*120}
+  s.style.opacity=o;s.style.zIndex=i;s.style.transform=`translateY(${y}px)`;
+  if(o&&i<6)P.push(setClip(i,l))}
+ let l=t*F[0]; // s0
+ $('logo').style.transform=`scale(${back(l/0.6)}) rotate(${Math.sin(l*3)*3}deg)`;
+ $('v0').style.transform=`translateY(${(1-back((l-0.15)/0.6))*300}px)`;
+ $('t0').style.transform=`scale(${back((l-0.6)/0.5)})`;confetti(0,l-0.7);
+ l=(t-T0[1])*F[1]; // capy skates across as counter ticks
+ const p1=eio(l/1.6);$('n1').textContent=Math.round(N*p1);$('n1').style.transform=`rotate(-6deg) scale(${1+0.3*Math.max(0,1-Math.abs(l-1.6)*5)})`;
+ $('v1').style.left=(-160+p1*300)+'px';$('v1').style.transform=`rotate(${Math.sin(l*8)*3}deg)`;
+ for(let i=0;i<15;i++){const q=(l-0.1-i*0.1);$('st'+i).style.transform=`scale(${back(q/0.25)}) rotate(${(i%3-1)*12}deg)`;$('st'+i).style.background=(q>0&&i<N)?'#e06d2b':'transparent';$('st'+i).style.borderColor=(q>0&&i<N)?'#fffdf8':'#8a7a2a'}
+ $('t1').style.transform=`scale(${back((l-1.6)/0.4)}) rotate(-3deg)`;confetti(1,l-1.6,180,140);
+ l=(t-T0[2])*F[2]; // cards rain in, fan
+ arts.forEach((a,i)=>{const c=$('c'+i),p=back((l-i*0.09)/0.45),j=i-4;const tx=134+j*24,ty=120+Math.abs(j)*8;
+  c.style.left=tx+'px';c.style.top=ty+'px';c.style.zIndex=10-Math.abs(j);c.style.transform=`translateY(${(1-cl(p))*-500}px) rotate(${j*9*p+(1-cl(p))*90}deg)`});
+ $('v2').style.transform=`translateY(${(1-back((l-0.2)/0.5))*260}px)`;
+ $('sec').style.transform=`scale(${(l>1.2?1:0)*(1+2*(1-eo((l-1.2)/0.25)))})`;$('sec').style.opacity=cl((l-1.2)/0.1);confetti(2,l-1.3,180,320);
+ l=(t-T0[3])*F[3]; // meerkat pops from burrow
+ const p3=eio((l-0.4)/1.3);$('n3').textContent=Math.round(Q*p3);$('n3').style.transform=`rotate(5deg) scale(${1+0.3*Math.max(0,1-Math.abs(l-1.7)*5)})`;
+ $('v3').style.transform=`translateY(${(1-back(l/0.5))*240}px)`;
+ QP.forEach((p,i)=>{const q=l-0.4-i*0.2;const e=$('q'+i);e.textContent=q>0.25?'✓':'?';e.style.background=q>0.25?'#2f8568':'#fffdf8';e.style.color=q>0.25?'#fff':'#2f8568';e.style.transform=`translateY(${Math.sin(l*4+i)*5}px) scale(${back((l-i*0.06)/0.3)*(q>0.25?1+0.3*Math.max(0,1-(q-0.25)*6):1)})`});
+ $('t3').style.transform=`scale(${back((l-1.7)/0.4)})`;
+ l=(t-T0[4])*F[4]; // map camera
+ {const W=328,H0=360,dr=eio((l-0.4)/2.8),len=RL*dr,r=$('route');r.style.strokeDasharray=RL;r.style.strokeDashoffset=RL-len;
+  const tip=r.getPointAtLength(len);let s=1.05,cx=tip.x,cy=tip.y,H=H0;
+  const z=eio((l-3.3)/0.8);const sF=W/1000;s=s+(sF-s)*z;cx=cx+(500-cx)*z;cy=cy+(279-cy)*z;H=H0+(558*sF-H0)*z;
+  const zi=eo(l/0.4);s=s*(0.8+0.2*zi);
+  $('win').style.height=H+'px';$('win').style.top=(78+(H0-H)/2)+'px';
+  let tx=W/2-cx*s,ty=H/2-cy*s;tx=Math.min(0,Math.max(W-1000*s,tx));ty=Math.min(0,Math.max(H-558*s,ty));
+  $('map').style.transform=`translate(${tx}px,${ty}px) scale(${s})`;
+  PT.forEach((p,j)=>{$('p'+j).style.transform=`scale(${back((len-CUM[j]+5)/40)/Math.max(s,0.5)})`});
+  $('km').textContent=(3.4*dr).toFixed(1)}
+ $('v4').style.transform=`translateY(${(1-back((l-0.2)/0.5))*240}px)`;
+ l=(t-T0[5])*F[5]; // elephant sprays badge
+ $('v5').style.transform=`translateY(${(1-back(l/0.5))*260}px)`;
+ for(let i=0;i<14;i++){const q=l-0.5-i*0.05,e=$('d'+i);if(q<0||q>0.7){e.style.opacity=0;continue}e.style.opacity=1;const u=q/0.7;
+  const x=250+(160+(i%5-2)*25-250)*u,y=430-(290*u)+ -120*Math.sin(Math.PI*u)+(i%3)*10;e.style.transform=`translate(${x}px,${y}px)`}
+ $('badge').style.transform=`scale(${l<0.9?0.6:back((l-0.9)/0.5)}) rotate(${(1-eo((l-0.9)/0.6))*-180}deg)`;$('badge').style.opacity=l<0.9?0:1;{const x=-60+eo((l-1.4)/0.7)*320;$('bsh').style.clipPath=`polygon(${x}px 0,${x+34}px 0,${x+4}px 181px,${x-30}px 181px)`}
+ $('t5').style.transform=`scale(${back((l-1.1)/0.4)})`;confetti(5,l-1.0);CONF[5].forEach(p=>p.e.style.zIndex=1);
+ l=(t-T0[6])*F[6];
+ $('rc').style.transform=`perspective(700px) rotateY(${(1-eo(l/0.7))*180}deg) scale(${back(l/0.7)})`;
+ $('shine').style.left=(-70+eo((l-0.7)/0.8)*340)+'px';
+ $('share').style.transform=`translateY(${(1-back((l-0.6)/0.5))*200}px) scale(${1+0.04*Math.sin(Math.max(0,l-1.2)*8)})`;confetti(6,l-0.6);
+ await Promise.all(P);
+}
+// ---- app adaptation ----
+['tiger','capy','rp','meer','gir','ele'].forEach((c,i)=>$('v'+i).style.backgroundImage=`url(a/${c}.webp)`);
+document.querySelectorAll('.tierimg').forEach(im=>im.src=`../assets/badges/tier_${TIER}.webp`);
+$('t5t').textContent=`Mốc ${TIER} thẻ`;$('h2').textContent=`${N} thẻ. ${N>=15?'Đủ bộ.':'Còn '+(15-N)+' thẻ nữa.'}`;$('sec2').textContent=`${SC}/3`;$('qd').textContent='/'+QT;
+$('tag1').textContent=N>=15?'trạm · full map 🔥':'trạm · đang lên level 🔥';
+for(let i=N;i<15;i++)$('st'+i).textContent='';
+// ---- fit to screen ----
+function fit(){const k=Math.min(innerWidth/360,innerHeight/640);$('app').style.transform=`translate(-50%,-50%) scale(${k})`}
+addEventListener('resize',fit);fit();
+// ---- story player ----
+let t=0,paused=false,last=null,holdT=null,held=false,ended=false;
+const slideAt=x=>{for(let i=0;i<D.length;i++)if(x<T0[i]+D[i])return i;return D.length-1};
+function seek(x){t=Math.max(0,Math.min(TOTAL-0.001,x));ended=false}
+function loop(ts){if(last==null)last=ts;const dt=Math.min(0.1,(ts-last)/1000);last=ts;
+ if(!paused&&!ended){t+=dt;if(t>=TOTAL-0.001){t=TOTAL-0.001;ended=true}}
+ render(t);$('btns').classList.toggle('on',slideAt(t)===D.length-1&&(t-T0[D.length-1])>1.2);
+ requestAnimationFrame(loop)}
+const app=$('app');
+function isUI(e){return e.target.closest('#btns button,#x')}
+app.addEventListener('pointerdown',e=>{if(isUI(e))return;held=false;holdT=setTimeout(()=>{held=true;paused=true;$('pz').style.opacity=1},220)});
+app.addEventListener('pointerup',e=>{if(isUI(e))return;clearTimeout(holdT);if(held){paused=false;$('pz').style.opacity=0;return}
+ const r=app.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,k=slideAt(t);
+ if(x<0.33){seek(t-T0[k]>0.8?T0[k]+0.5:T0[Math.max(0,k-1)]+(k?0.5:0))}else{if(k<D.length-1)seek(T0[k+1]+0.5);else{ended=true}}});
+app.addEventListener('pointercancel',()=>{clearTimeout(holdT);paused=false;$('pz').style.opacity=0});
+app.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('visibilitychange',()=>{paused=document.hidden;last=null});
+const VID='a/wrapped_demo_v4.mp4',VNAME='TapTap_Wrapped.mp4';
+function dl(){const a=document.createElement('a');a.href=VID;a.download=VNAME;document.body.appendChild(a);a.click();a.remove()}
+$('bsave').onclick=dl;
+$('bshare').onclick=async()=>{try{const b=await (await fetch(VID)).blob();const f=new File([b],VNAME,{type:'video/mp4'});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Tap Tap Wrapped',text:'#TapTapWrapped'});return}}catch(err){if(err&&err.name==='AbortError')return}dl()};
+$('x').onclick=()=>{if(parent!==window)parent.postMessage('taptap-wrapped-close','*');else history.back()};
+window.render=render;window.READY=1;window.seekTo=seek;window.pauseStory=v=>{paused=v};
+requestAnimationFrame(loop);
+
+</script></body></html>
