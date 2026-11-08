@@ -211,14 +211,13 @@ function ask(question, station) {
       mode,
       answer: UNKNOWN,
       citations: [],
-      retrieved: [],
       status: 'restricted_or_unknown'
     };
   }
 
   const hits = retrieve(question, station, 5);
   if (!hits.length) {
-    return { mode, answer: UNKNOWN, citations: [], retrieved: [], status: 'unknown' };
+    return { mode, answer: UNKNOWN, citations: [], status: 'unknown' };
   }
 
   // Extract source text only. Keep up to two close excerpts so public
@@ -241,7 +240,7 @@ function ask(question, station) {
     citations.push({
       number: i,
       id: c.id,
-      source: c.source,
+      source: publicBasename(c.source),
       title: c.title,
       urls: meta.urls || [],
       pointer: meta.json_pointer,
@@ -253,13 +252,6 @@ function ask(question, station) {
     mode,
     answer: answer.join('\n\n'),
     citations,
-    retrieved: hits.map((c) => ({
-      id: c.id,
-      title: c.title,
-      source: c.source,
-      audience: c.audience,
-      score: c.score
-    })),
     status: 'ok'
   };
   if (blocked(result.answer)) {
@@ -267,20 +259,88 @@ function ask(question, station) {
       mode,
       answer: UNKNOWN,
       citations: [],
-      retrieved: [],
       status: 'restricted_or_unknown'
     };
   }
   return result;
 }
 
+function publicBasename(filePath) {
+  if (filePath == null || filePath === '') return filePath == null ? '' : String(filePath);
+  return path.posix.basename(String(filePath).replace(/\\/g, '/'));
+}
+
+function scrubWorkspaceInString(s) {
+  return String(s)
+    .replace(/\/workspace\/[^\s"'\\]*/g, (p) => {
+      const base = path.posix.basename(p);
+      return !base || base === 'workspace' ? '' : base;
+    })
+    .replace(/\/workspace\b/g, '');
+}
+
+function sanitizePublic(value, key) {
+  if (value == null) return value;
+  if (typeof value === 'string') {
+    if (key === 'source') return publicBasename(value);
+    return scrubWorkspaceInString(value);
+  }
+  if (Array.isArray(value)) return value.map((item) => sanitizePublic(item));
+  if (typeof value === 'object') {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) {
+      if (k === 'retrieved') continue;
+      out[k] = sanitizePublic(v, k);
+    }
+    return out;
+  }
+  return value;
+}
+
+function publicHttpPayload(result) {
+  const payload = sanitizePublic({
+    mode: result && result.mode,
+    answer: result && result.answer,
+    citations: result && result.citations ? result.citations : [],
+    status: result && result.status,
+    ...(result && result.error ? { error: result.error } : {})
+  });
+  delete payload.retrieved;
+  let json = JSON.stringify(payload);
+  if (json.includes('/workspace') || /"retrieved"\s*:/.test(json)) {
+    json = json
+      .replace(/\/workspace\/[^\s"'\\]*/g, (p) => path.posix.basename(p))
+      .replace(/\/workspace\b/g, '');
+    const parsed = JSON.parse(json);
+    delete parsed.retrieved;
+    json = JSON.stringify(parsed);
+    if (json.includes('/workspace') || /"retrieved"\s*:/.test(json)) {
+      return { answer: UNKNOWN, citations: [], status: 'error' };
+    }
+    return parsed;
+  }
+  return payload;
+}
+
 function jsonRes(res, status, obj) {
+  const payload = publicHttpPayload(obj);
+  const body = JSON.stringify(payload);
+  if (body.includes('/workspace') || /"retrieved"\s*:/.test(body)) {
+    const safe = JSON.stringify({ answer: UNKNOWN, citations: [], status: 'error' });
+    if (typeof res.status === 'function' && typeof res.json === 'function') {
+      return res.status(status).json(JSON.parse(safe));
+    }
+    res.statusCode = status;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.end(safe);
+    return;
+  }
   if (typeof res.status === 'function' && typeof res.json === 'function') {
-    return res.status(status).json(obj);
+    return res.status(status).json(payload);
   }
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.end(JSON.stringify(obj));
+  res.end(body);
 }
 
 function setCors(res) {
@@ -363,6 +423,7 @@ handler.ask = ask;
 handler.blocked = blocked;
 handler.canonicalizeStation = canonicalizeStation;
 handler.getChunks = getChunks;
+handler.publicHttpPayload = publicHttpPayload;
 handler.UNKNOWN = UNKNOWN;
 
 module.exports = handler;
