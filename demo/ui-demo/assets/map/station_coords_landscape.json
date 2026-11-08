@@ -1,0 +1,92 @@
+[
+ {
+  "id": 1,
+  "name": "Voi châu Á",
+  "x_pct": 43,
+  "y_pct": 60
+ },
+ {
+  "id": 2,
+  "name": "Hươu cao cổ",
+  "x_pct": 35,
+  "y_pct": 63
+ },
+ {
+  "id": 3,
+  "name": "Chuột lang nước",
+  "x_pct": 35,
+  "y_pct": 30
+ },
+ {
+  "id": 4,
+  "name": "Cầy meerkat",
+  "x_pct": 38,
+  "y_pct": 36
+ },
+ {
+  "id": 5,
+  "name": "Gấu chó",
+  "x_pct": 22,
+  "y_pct": 25
+ },
+ {
+  "id": 6,
+  "name": "Gấu mèo",
+  "x_pct": 70,
+  "y_pct": 58
+ },
+ {
+  "id": 7,
+  "name": "Tê giác trắng",
+  "x_pct": 79,
+  "y_pct": 31
+ },
+ {
+  "id": 8,
+  "name": "Hổ Bengal vàng",
+  "x_pct": 13,
+  "y_pct": 20
+ },
+ {
+  "id": 9,
+  "name": "Vượn má vàng",
+  "x_pct": 18,
+  "y_pct": 26
+ },
+ {
+  "id": 10,
+  "name": "Hồng hạc",
+  "x_pct": 46,
+  "y_pct": 43
+ },
+ {
+  "id": 11,
+  "name": "Công Ấn",
+  "x_pct": 54,
+  "y_pct": 38
+ },
+ {
+  "id": 12,
+  "name": "Cá sấu",
+  "x_pct": 13.5,
+  "y_pct": 30
+ },
+ {
+  "id": 13,
+  "name": "Rùa Sulcata",
+  "x_pct": 81,
+  "y_pct": 60
+ },
+ {
+  "id": 14,
+  "name": "Ngựa lùn",
+  "x_pct": 23,
+  "y_pct": 17
+ },
+ {
+  "id": 15,
+  "name": "Hà mã lùn",
+  "x_pct": 30,
+  "y_pct": 45
+ }
+]

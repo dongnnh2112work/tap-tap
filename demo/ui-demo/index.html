@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Tap Tap — Sưu Tập Thẻ Thú Thảo Cầm Viên</title>
+  <link rel="icon" type="image/png" href="assets/logo/taptap_icon_transparent_512.webp" />
+
+  <!-- Google Fonts: Baloo 2 + Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- GSAP for motion-v7 3D Card Tilt, Holo & Spring Reveal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- App Styles & Motion-v7 Card Styles -->
+  <link rel="stylesheet" href="css/card-motion.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="phone-viewport-wrapper">
+    <div class="app-frame" id="appFrame">
+      <div class="paper-grain-overlay" aria-hidden="true"></div>
+
+      <!-- Toast Notification -->
+      <div class="tt-toast" id="ttToast" role="status" aria-live="polite"></div>
+
+      <!-- Top Bar (Triple-tap transparent logo to open Hidden Dev Panel) -->
+      <header class="app-topbar">
+        <button type="button" class="brand-logo-btn" id="topBrandLogoBtn" aria-label="Tap Tap">
+          <img src="assets/logo/taptap_logo_brown_transparent.webp" alt="Tap Tap" />
+        </button>
+
+        <div class="topbar-right">
+          <button type="button" class="ask-fab" id="askFab" hidden>
+            <span class="ask-fab-icon" aria-hidden="true">?</span>
+            <span>Hỏi Tap Tap</span>
+          </button>
+          <button type="button" class="dex-counter-pill" id="topDexCounterBtn" aria-label="Bộ sưu tập">
+            <span class="dot"></span>
+            <span id="topCounterText">0/15</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ================= 9 SCREENS VIEWPORT ================= -->
+      <main class="screens-viewport">
+
+        <!-- =======================================================
+             SCREEN 1: TRANG CHỦ
+             ======================================================= -->
+        <section class="screen home-screen is-active" id="screen-1" data-screen="1" aria-label="Trang chủ">
+          <div class="home-center-hero">
+            <img class="home-logo-banner" src="assets/logo/taptap_logo_brown_transparent.webp" alt="Tap Tap" />
+            <h1 class="home-title">Săn đủ 15 thẻ thú Thảo Cầm Viên</h1>
+
+            <div class="home-featured-strip" aria-hidden="true">
+              <div class="home-mini-card"><img src="assets/cards/art/voi.webp" alt="Voi châu Á" /></div>
+              <div class="home-mini-card"><img src="assets/cards/art/capybara.webp" alt="Chuột lang nước" /></div>
+              <div class="home-mini-card"><img src="assets/cards/art/huou-cao-co.webp" alt="Hươu cao cổ" /></div>
+            </div>
+          </div>
+
+          <div class="home-bottom-panel">
+            <div class="home-progress-widget">
+              <div class="home-progress-top">
+                <span>Đã săn</span>
+                <span id="homeProgressText">0/15</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="homeProgressFill"></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn-main btn-accent" id="homeTapNextBtn" style="width: 100%;">
+              <span id="homeTapNextLabel">Chạm trạm NFC</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 2: TRANG TRẠM (True Full-Screen Intro Video, No Chrome)
+             ======================================================= -->
+        <section class="screen station-intro-screen" id="screen-2" data-screen="2" aria-label="Trang trạm">
+          <video class="station-video-el" id="stationIntroVideo" src="intro-anim/tiger_v2_trim.mp4" muted autoplay
+            playsinline webkit-playsinline preload="auto"></video>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 3: ĐĂNG NHẬP GOOGLE
+             ======================================================= -->
+        <section class="screen" id="screen-3" data-screen="3" aria-label="Đăng nhập Google">
+          <div class="login-screen-card">
+            <img class="login-logo-transparent" src="assets/logo/taptap_icon_transparent_512.webp" alt="Tap Tap" />
+
+            <h1 class="home-title">Đăng nhập lưu bộ thẻ</h1>
+
+            <button type="button" class="google-mock-btn" id="mockGoogleSignInBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#EA4335"
+                  d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z" />
+                <path fill="#4285F4"
+                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z" />
+                <path fill="#FBBC05"
+                  d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z" />
+                <path fill="#34A853"
+                  d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.9C3.5 21.4 7.4 24 12 24z" />
+              </svg>
+              <span>Tiếp tục với Google</span>
+            </button>
+
+            <button type="button" class="btn-main btn-cream" id="skipLoginToCardBtn" style="width: 100%;">
+              <span>Để sau</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 4: THẺ THÚ + QUIZ (Card pops out first, then UI appears)
+             ======================================================= -->
+        <section class="screen card-quiz-screen" id="screen-4" data-screen="4" aria-label="Thẻ thú và câu đố">
+          <div class="cq-top-row">
+            <button type="button" class="icon-back-btn" id="cqBackBtn">
+              <span>← Bộ thẻ</span>
+            </button>
+            <button type="button" class="icon-back-btn" id="cqFlipCardBtn">
+              <span>Lật thẻ ↻</span>
+            </button>
+          </div>
+
+          <!-- Reusable motion-v7 3D Card Stage -->
+          <div class="cq-card-area">
+            <div id="cqCardMount"></div>
+          </div>
+
+          <!-- Fun Fact + Auth Prompt / Quiz (appears after card pops out) -->
+          <div class="cq-post-reveal-ui">
+            <div class="cq-fact-strip" id="cqFunFactText"></div>
+
+            <!-- Google Sign-in Prompt if guest -->
+            <div class="cq-auth-box" id="cqAuthBox" style="display: none;">
+              <div class="cq-auth-title">Đăng nhập lưu bộ thẻ</div>
+              <button type="button" class="google-mock-btn" id="cqGoogleSignInBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#EA4335"
+                    d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z" />
+                  <path fill="#4285F4"
+                    d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z" />
+                  <path fill="#FBBC05"
+                    d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z" />
+                  <path fill="#34A853"
+                    d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.9C3.5 21.4 7.4 24 12 24z" />
+                </svg>
+                <span>Tiếp tục với Google</span>
+              </button>
+              <button type="button" class="btn-main btn-cream" id="cqSkipAuthBtn"
+                style="min-height: 38px; padding: 6px 12px; font-size: 0.84rem; border: none; background: transparent;">
+                <span>Để sau</span>
+              </button>
+            </div>
+
+            <!-- Soft Optional Challenge Prompt -->
+            <div class="cq-challenge-prompt" id="cqChallengePrompt" style="display: none;">
+              <div class="cq-challenge-title">Có thử thách nè, chơi không?</div>
+              <div class="cq-challenge-actions">
+                <button type="button" class="btn-main btn-accent" id="cqPlayQuizBtn">
+                  <span>Chơi luôn</span>
+                </button>
+                <button type="button" class="btn-main btn-cream" id="cqLaterQuizBtn">
+                  <span>Để sau</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quiz Box (Hidden until 'Chơi luôn' is clicked) -->
+            <div class="quiz-box" id="quizBox" style="display: none;">
+              <div class="quiz-question-text" id="quizQuestionText"></div>
+              <div class="quiz-options-list" id="quizOptionsList"></div>
+            </div>
+
+            <div class="cq-post-win-actions" id="cqPostWinActions" style="display: none; flex-direction: column; gap: 8px;">
+              <button type="button" class="btn-main btn-accent" id="cqNextMapBtn" style="width: 100%;">
+                <span>Trạm gợi ý tiếp theo trên bản đồ →</span>
+              </button>
+              <button type="button" class="btn-main btn-cream" id="cqGoCollectionBtn" style="width: 100%; min-height: 44px; font-size: 0.92rem;">
+                <span>Xem Bộ sưu tập</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 5: BỘ SƯU TẬP
+             ======================================================= -->
+        <section class="screen" id="screen-5" data-screen="5" aria-label="Bộ sưu tập">
+          <div class="collection-header-card">
+            <div class="collection-title-row">
+              <h1>Bộ sưu tập</h1>
+              <span class="collection-count-badge" id="colCountBadge">0/15</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="colProgressFill"></div>
+            </div>
+          </div>
+
+          <!-- Celebration Banner when 15/15 -->
+          <div class="wrapped-unlock-banner" id="colWrappedBanner">
+            <div style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; color: #f4d35e;">
+              Full 15/15! Mở khóa Wrapped
+            </div>
+            <button type="button" class="btn-main btn-accent" id="openWrappedFromColBtn"
+              style="min-height: 40px; padding: 8px 14px; font-size: 0.88rem;">
+              <span>Mở ▶</span>
+            </button>
+          </div>
+
+          <!-- U7 Badges Row (5 / 10 / 15) -->
+          <div class="badges-row-grid" id="colBadgesGrid"></div>
+
+          <!-- 15 Stations Grid (#01–#15) -->
+          <div class="card-dex-grid" id="colDexGrid"></div>
+
+          <!-- Secret Cards -->
+          <div class="dex-section-title">Thẻ bí mật</div>
+          <div class="secret-cards-grid" id="colSecretGrid"></div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 6: CHI TIẾT THẺ
+             ======================================================= -->
+        <section class="screen card-detail-screen" id="screen-6" data-screen="6" aria-label="Chi tiết thẻ">
+          <div class="cd-tools-row">
+            <button type="button" class="icon-back-btn" id="cdBackColBtn">
+              <span>← Bộ thẻ</span>
+            </button>
+            <button type="button" class="icon-back-btn" id="cdFlipBtn">
+              <span>Lật thẻ ↻</span>
+            </button>
+          </div>
+
+          <div class="cd-stage-wrap">
+            <div id="cdCardMount"></div>
+          </div>
+
+          <div class="cd-bottom-panel">
+            <div>
+              <h2 style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1.12rem;" id="cdBottomTitle">
+              </h2>
+              <p style="font-size: 0.82rem; font-weight: 600; color: var(--ink-body); margin-top: 2px;"
+                id="cdBottomFact"></p>
+            </div>
+
+            <div class="cd-nav-row">
+              <button type="button" class="btn-main btn-cream" id="cdPrevCardBtn"
+                style="min-height: 44px; padding: 8px;">
+                <span>‹ Trước</span>
+              </button>
+              <button type="button" class="btn-main btn-accent" id="cdChallengeBtn"
+                style="min-height: 44px; padding: 8px 12px; font-size: 0.92rem;">
+                <span>🎯 Thử thách</span>
+              </button>
+              <button type="button" class="btn-main btn-dark" id="cdNextCardBtn"
+                style="min-height: 44px; padding: 8px;">
+                <span>Tiếp ›</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 7: WRAPPED + CHIA SẺ (Animated story in iframe)
+             ======================================================= -->
+        <section class="screen wrapped-screen" id="screen-7" data-screen="7" aria-label="Wrapped và chia sẻ">
+          <button type="button" class="wrapped-floating-close-btn" id="wrappedCloseBtn" aria-label="Đóng Wrapped">
+            <span>Đóng ✕</span>
+          </button>
+          <iframe class="wrapped-iframe" id="wrappedIframe" allow="web-share; autoplay" src="about:blank" title="Tap Tap Wrapped"></iframe>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 8: HỒ SƠ
+             ======================================================= -->
+        <section class="screen" id="screen-8" data-screen="8" aria-label="Hồ sơ">
+          <div class="profile-card">
+            <img class="profile-logo-transparent" src="assets/logo/taptap_icon_transparent_512.webp" alt="Tap Tap" />
+            <h1 style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1.32rem;" id="profUserName">
+              Minh Anh
+            </h1>
+
+            <div class="profile-stats-grid">
+              <div class="profile-stat-box">
+                <span class="profile-stat-num" id="profStatCards">0/15</span>
+                <span class="profile-stat-label">Thẻ thú</span>
+              </div>
+              <div class="profile-stat-box">
+                <span class="profile-stat-num" id="profStatBadges">0/3</span>
+                <span class="profile-stat-label">Huy hiệu</span>
+              </div>
+              <div class="profile-stat-box">
+                <span class="profile-stat-num" id="profStatSecrets">0/3</span>
+                <span class="profile-stat-label">Thẻ bí mật</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button type="button" class="btn-main btn-accent" id="profOpenWrappedBtn">
+              <span>Mở Tap Tap Wrapped</span>
+            </button>
+            <button type="button" class="btn-main btn-cream" id="profResetProgressBtn"
+              style="font-size: 0.88rem; min-height: 44px; color: var(--brand-red); border-color: rgba(217, 78, 78, 0.35);">
+              <span>Đặt lại tiến độ</span>
+            </button>
+            <button type="button" class="btn-subtle" id="profAuthActionBtn">
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- =======================================================
+             SCREEN 9: BẢN ĐỒ TRẠM NFC
+             ======================================================= -->
+        <section class="screen map-screen" id="screen-9" data-screen="9" aria-label="Bản đồ trạm NFC">
+          <!-- Next Suggested Enclosure Banner -->
+          <button type="button" class="map-next-banner" id="mapNextSuggestionBtn">
+            <div>
+              <span class="map-next-tag">Trạm gợi ý tiếp theo</span>
+              <div style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 0.94rem; margin-top: 2px;"
+                id="mapNextStationText">
+                #08 Hổ Bengal vàng (Mi–Xám) • Khu hổ mới
+              </div>
+            </div>
+            <span style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 0.88rem; color: var(--brand-orange); white-space: nowrap; flex-shrink: 0;">
+              Đi →
+            </span>
+          </button>
+
+          <div class="map-stage-wrapper">
+            <!-- Landscape gouache map: pan (drag/scroll) + zoom (pinch / wheel / buttons) -->
+            <div class="map-viewport-card" id="mapViewportCard">
+              <div class="map-canvas-inner" id="mapCanvasInner">
+                <img class="map-bg-img" src="assets/map/zoo_map_gouache_landscape.webp" alt="Bản đồ Thảo Cầm Viên"
+                  draggable="false" />
+                <div id="mapPinsContainer"></div>
+              </div>
+            </div>
+
+            <div class="map-zoom-ctrls">
+              <button type="button" class="map-zoom-btn" id="mapZoomInBtn" aria-label="Phóng to">+</button>
+              <button type="button" class="map-zoom-btn" id="mapZoomOutBtn" aria-label="Thu nhỏ">−</button>
+            </div>
+
+            <!-- Slide-up Bottom Sheet with NFC Station Photo Slot -->
+            <div class="map-bottom-sheet" id="mapBottomSheet" role="region" aria-label="Thông tin trạm">
+              <div class="map-sheet-row">
+                <div class="station-photo-slot" id="mapSheetPhotoSlot">
+                  Hổ Bengal vàng (Mi–Xám)
+                </div>
+                <div class="map-sheet-info">
+                  <div class="map-sheet-header">
+                    <h2 style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1rem; line-height: 1.15;"
+                      id="mapSheetTitle">
+                      #08 • Hổ Bengal vàng (Mi–Xám)
+                    </h2>
+                    <button type="button" class="icon-back-btn" id="mapCloseSheetBtn"
+                      style="min-width: 32px; min-height: 32px; padding: 0 8px; font-size: 0.76rem;">
+                      <span>✕</span>
+                    </button>
+                  </div>
+                  <div style="font-size: 0.78rem; font-weight: 800; color: var(--brand-orange);" id="mapSheetZone">
+                    Khu hổ mới
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" class="btn-main btn-accent" id="mapSheetPrimaryBtn"
+                style="min-height: 44px; padding: 8px 14px; font-size: 0.92rem; width: 100%;">
+                <span>Xem vị trí NFC</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ================= BOTTOM NAV (Screens 1, 5, 8, 9) ================= -->
+      <nav class="bottom-nav" id="bottomNav" aria-label="Điều hướng chính">
+        <button type="button" class="nav-tab is-active" data-target="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span>Trang chủ</span>
+        </button>
+
+        <button type="button" class="nav-tab" data-target="5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9" rx="1.5" />
+            <rect x="14" y="3" width="7" height="9" rx="1.5" />
+            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          </svg>
+          <span>Bộ sưu tập</span>
+        </button>
+
+        <button type="button" class="nav-tab" data-target="9">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+          </svg>
+          <span>Bản đồ</span>
+        </button>
+
+        <button type="button" class="nav-tab" data-target="8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Hồ sơ</span>
+        </button>
+      </nav>
+
+      <!-- ================= HỎI TAP TAP sheet (button lives in the top bar) ================= -->
+      <div class="ask-sheet-backdrop" id="askSheetBackdrop" role="dialog" aria-label="Hỏi Tap Tap" aria-hidden="true">
+        <div class="ask-sheet">
+          <div class="ask-sheet-handle" aria-hidden="true"></div>
+          <div class="ask-sheet-header">
+            <h2>Hỏi Tap Tap</h2>
+            <button type="button" class="icon-back-btn" id="askCloseBtn" aria-label="Đóng">
+              <span>✕</span>
+            </button>
+          </div>
+          <p class="ask-sheet-lead">Hỏi về thú, trạm NFC, hoặc cách chơi. Chỉ trả lời từ tài liệu công khai.</p>
+          <div class="ask-station-chip" id="askStationContext" hidden></div>
+          <div class="ask-suggest-row">
+            <button type="button" class="ask-suggest" data-ask-suggest="Cách chơi Tap Tap như thế nào?">Cách chơi?</button>
+            <button type="button" class="ask-suggest" data-ask-suggest="Cụ voi Chuông bao nhiêu tuổi?">Cụ Chuông?</button>
+            <button type="button" class="ask-suggest" data-ask-suggest="Có thẻ bí mật nào không?">Thẻ bí mật?</button>
+          </div>
+          <form class="ask-form" id="askForm">
+            <label class="visually-hidden" for="askQuestionInput">Câu hỏi</label>
+            <textarea id="askQuestionInput" name="question" rows="2" maxlength="2000"
+              placeholder="Hỏi về thú, trạm, hoặc cách chơi…" required></textarea>
+            <button type="submit" class="btn-main btn-accent" id="askSubmitBtn">
+              <span>Hỏi</span>
+            </button>
+          </form>
+          <div class="ask-result" id="askResult" hidden></div>
+        </div>
+      </div>
+
+      <!-- ================= MILESTONE BADGE UNLOCK MODAL (5 / 10 / 15) ================= -->
+      <div class="milestone-modal-backdrop" id="milestoneModal" role="dialog" aria-label="Mở khóa huy hiệu">
+        <div class="milestone-modal-card">
+          <div class="milestone-sparkles" aria-hidden="true">✨ ⭐ ✨</div>
+          <h2 class="milestone-modal-title">Mở khóa huy hiệu mới!</h2>
+          <div class="milestone-modal-art">
+            <img class="milestone-modal-img" id="milestoneModalImg" src="assets/badges/tier_5.webp" alt="Huy hiệu" />
+          </div>
+          <div class="milestone-modal-name" id="milestoneModalName">Mốc 5 thẻ thú</div>
+          <p class="milestone-modal-desc" id="milestoneModalDesc">Collector chính hiệu! Tiếp tục khám phá nào.</p>
+          <button type="button" class="btn-main btn-accent" id="milestoneModalCloseBtn" style="width: 100%;">
+            <span>Tuyệt vời!</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= HIDDEN DEV PANEL (Triple-tap Logo or Shift+D) ================= -->
+      <div class="dev-modal-backdrop" id="devModalBackdrop" role="dialog" aria-label="Bảng công cụ kiểm thử">
+        <div class="dev-modal-sheet">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1.05rem;">
+              Kiểm thử nhanh
+            </h2>
+            <button type="button" class="dev-chip-btn" id="devCloseBtn">Đóng ✕</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;">
+            <button type="button" class="dev-chip-btn" data-dev-fill="0">0/15</button>
+            <button type="button" class="dev-chip-btn" data-dev-fill="5">5/15</button>
+            <button type="button" class="dev-chip-btn" data-dev-fill="10">10/15</button>
+            <button type="button" class="dev-chip-btn" data-dev-fill="15">15/15</button>
+          </div>
+
+          <button type="button" class="dev-chip-btn" id="devToggleSecretsBtn" style="width: 100%;">
+            Mở / Khóa 3 thẻ bí mật
+          </button>
+
+          <div class="dev-grid-btns">
+            <button type="button" class="dev-chip-btn" data-dev-screen="1">1. Trang chủ</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="2">2. Trang trạm</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="3">3. Đăng nhập</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="4">4. Thẻ + Quiz</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="5">5. Bộ sưu tập</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="6">6. Chi tiết thẻ</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="7">7. Wrapped</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="8">8. Hồ sơ</button>
+            <button type="button" class="dev-chip-btn" data-dev-screen="9">9. Bản đồ</button>
+          </div>
+
+          <div class="dev-grid-btns" id="devStationButtons"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/stations-fallback.js"></script>
+  <script src="js/card-motion.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ask.js"></script>
+</body>
+
+</html>

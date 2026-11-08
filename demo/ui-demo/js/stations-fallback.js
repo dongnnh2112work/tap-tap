@@ -1,0 +1,821 @@
+window.TAPTAP_FALLBACK_DATA = {
+  "meta": {
+    "title": "Tap Tap – Thảo Cầm Viên Sài Gòn",
+    "totalStations": 15,
+    "defaultIntroVideo": "intro-anim/tiger_v2_trim.mp4",
+    "mapImage": "assets/map/zoo_map_gouache_landscape.webp"
+  },
+  "badges": [
+    {
+      "id": "badge-5",
+      "milestone": 5,
+      "title": "Mốc 5",
+      "img": "assets/badges/tier_5.webp",
+      "bg": "#FFF0D6",
+      "accent": "#E67E22"
+    },
+    {
+      "id": "badge-10",
+      "milestone": 10,
+      "title": "Mốc 10",
+      "img": "assets/badges/tier_10.webp",
+      "bg": "#E1F6EC",
+      "accent": "#2E8B67"
+    },
+    {
+      "id": "badge-15",
+      "milestone": 15,
+      "title": "Full 15",
+      "img": "assets/badges/tier_15.webp",
+      "bg": "#F3E5FC",
+      "accent": "#7D3C98"
+    }
+  ],
+  "secretCards": [
+    {
+      "id": "mika",
+      "slug": "meo-mika",
+      "code": "#S1",
+      "name": "Mèo cam Mika",
+      "zone": "Zoo Home Pet",
+      "funFact": "\"Chủ tịch\" hệ điều hành Zoo Home Pet",
+      "tintName": "cam kem",
+      "pastel": "#FFE5C8",
+      "accent": "#D96B27",
+      "glow": "rgba(255, 229, 200, 0.72)",
+      "cardArt": "assets/cards/art/meo-mika.webp"
+    },
+    {
+      "id": "swans",
+      "slug": "thien-nga-duong-hao",
+      "code": "#S2",
+      "name": "Thiên nga Dương – Hảo",
+      "zone": "Vườn hồng hạc",
+      "funFact": "Cặp đôi phát đường tại Vườn hồng hạc",
+      "tintName": "trắng ngà",
+      "pastel": "#F9F4E8",
+      "accent": "#B8863B",
+      "glow": "rgba(249, 244, 232, 0.78)",
+      "cardArt": "assets/cards/art/thien-nga-duong-hao.webp"
+    },
+    {
+      "id": "adjutant",
+      "slug": "co-gia-day-java",
+      "code": "#S3",
+      "name": "Già đẫy Java",
+      "zone": "Khu hồ nước",
+      "funFact": "\"Tổ trưởng\" trầm tính khu hồ nước",
+      "tintName": "xám xanh",
+      "pastel": "#D9E4EC",
+      "accent": "#486B85",
+      "glow": "rgba(217, 228, 236, 0.74)",
+      "cardArt": "assets/cards/art/co-gia-day-java.webp"
+    }
+  ],
+  "stations": [
+    {
+      "number": 1,
+      "id": "elephant",
+      "slug": "voi",
+      "code": "#01",
+      "name": "Voi châu Á",
+      "zone": "Chuồng voi, ven sông",
+      "funFact": "Cụ Chuông 66–67 tuổi — \"nhân chứng sống\" bền bỉ nhất Thảo Cầm Viên",
+      "tintName": "mint",
+      "pastel": "#CDE6D0",
+      "accent": "#2F8568",
+      "glow": "rgba(205, 230, 208, 0.72)",
+      "cardArt": "assets/cards/art/voi.webp",
+      "introVideo": "intro-anim/ele.mp4",
+      "mapPin": {
+        "x": 43,
+        "y": 60,
+        "routeStep": 1
+      },
+      "quiz": [
+        {
+          "q": "Cụ voi Chuông năm nay bao nhiêu tuổi?",
+          "options": [
+            "66–67 tuổi",
+            "20–25 tuổi",
+            "40–45 tuổi"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Biệt danh của cụ voi Chuông là gì?",
+          "options": [
+            "\"Nhân chứng sống\" của Thảo Cầm Viên",
+            "\"Vệ sĩ sa mạc\"",
+            "\"Tổ trưởng\" khu hồ nước"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Khu nhà của Voi châu Á nằm ở đâu?",
+          "options": [
+            "Chuồng voi, ven sông",
+            "Đảo vượn, hồ sen",
+            "Vườn hồng hạc"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "giraffe",
+      "slug": "huou-cao-co",
+      "code": "#02",
+      "name": "Hươu cao cổ",
+      "zone": "Chuồng HCC",
+      "funFact": "2 gia đình chân dài; nhà Thái–Lan có Thảo Em & Thái Anh",
+      "tintName": "đào",
+      "pastel": "#FFD2B1",
+      "accent": "#D95B26",
+      "glow": "rgba(255, 210, 177, 0.72)",
+      "cardArt": "assets/cards/art/huou-cao-co.webp",
+      "introVideo": "intro-anim/gir.mp4",
+      "mapPin": {
+        "x": 35,
+        "y": 63,
+        "routeStep": 2
+      },
+      "quiz": [
+        {
+          "q": "Chuồng HCC đang có mấy gia đình hươu cao cổ?",
+          "options": [
+            "2 gia đình",
+            "5 gia đình",
+            "10 gia đình"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hai thành viên thế hệ mới nhà Thái–Lan tên gì?",
+          "options": [
+            "Thảo Em, Thái Anh",
+            "Văn Bi, Thị Bo",
+            "Phú, Quý"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hươu cao cổ ở khu nào?",
+          "options": [
+            "Chuồng HCC",
+            "Khu bò sát",
+            "Vườn cá sấu"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "capybara",
+      "slug": "capybara",
+      "code": "#03",
+      "name": "Chuột lang nước",
+      "zone": "Vườn thú thân thiện",
+      "funFact": "Bộ tứ Phú–Quý–Cát–Tường — bộ trưởng ngoại giao chill nhất sở thú",
+      "tintName": "vàng bơ",
+      "pastel": "#F4E894",
+      "accent": "#D97724",
+      "glow": "rgba(244, 232, 148, 0.70)",
+      "cardArt": "assets/cards/art/capybara.webp",
+      "introVideo": "intro-anim/capy.mp4",
+      "mapPin": {
+        "x": 35,
+        "y": 30,
+        "routeStep": 3
+      },
+      "quiz": [
+        {
+          "q": "Bộ tứ Capybara tại Vườn thú thân thiện tên gì?",
+          "options": [
+            "Phú–Quý–Cát–Tường",
+            "Xuân–Hạ–Thu–Đông",
+            "Mây–Mưa–Gió–Nắng"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Capybara giữ kỷ lục gì trong giới động vật?",
+          "options": [
+            "Loài gặm nhấm lớn nhất",
+            "Loài gấu nhỏ nhất thế giới",
+            "Loài chim cao nhất"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Gặp bộ tứ Phú–Quý–Cát–Tường ở khu nào?",
+          "options": [
+            "Vườn thú thân thiện",
+            "Chuồng tê giác",
+            "Bát giác cây chòi"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "meerkat",
+      "slug": "meerkat",
+      "code": "#04",
+      "name": "Cầy meerkat",
+      "zone": "Vườn thú thân thiện",
+      "funFact": "Thay ca đứng gác 24/7 như \"vệ sĩ sa mạc\" chính hiệu",
+      "tintName": "cam nhạt",
+      "pastel": "#FFE0B5",
+      "accent": "#D46A1E",
+      "glow": "rgba(255, 224, 181, 0.70)",
+      "cardArt": "assets/cards/art/meerkat.webp",
+      "introVideo": "intro-anim/meer.mp4",
+      "mapPin": {
+        "x": 38,
+        "y": 36,
+        "routeStep": 4
+      },
+      "quiz": [
+        {
+          "q": "Thói quen thương hiệu của hội Meerkat là gì?",
+          "options": [
+            "Luân phiên đứng gác",
+            "Nằm ngửa trên cành cây",
+            "Đứng một chân dưới nước"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Meerkat được mệnh danh là gì?",
+          "options": [
+            "\"Vệ sĩ sa mạc\"",
+            "\"Nhân chứng sống\"",
+            "\"Chủ tịch\" vườn thú"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hội Meerkat đóng đô ở khu nào?",
+          "options": [
+            "Vườn thú thân thiện",
+            "Vườn cá sấu",
+            "Đảo vượn, hồ sen"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "sunbear",
+      "slug": "gau-cho",
+      "code": "#05",
+      "name": "Gấu chó (Noel)",
+      "zone": "Khu chuồng gấu",
+      "funFact": "Loài gấu nhỏ nhất thế giới; Noel cực mê nước mật ong",
+      "tintName": "hồng phấn",
+      "pastel": "#FAD4DC",
+      "accent": "#C94A6A",
+      "glow": "rgba(250, 212, 220, 0.70)",
+      "cardArt": "assets/cards/art/gau-cho.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 22,
+        "y": 25,
+        "routeStep": 5
+      },
+      "quiz": [
+        {
+          "q": "Thức uống chân ái của Gấu chó Noel là gì?",
+          "options": [
+            "Nước mật ong",
+            "Nước dừa tươi",
+            "Sữa đậu nành"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Gấu chó giữ kỷ lục gì trên thế giới?",
+          "options": [
+            "Loài gấu nhỏ nhất thế giới",
+            "Loài gặm nhấm lớn nhất",
+            "Có đuôi xòe dài 1,5m"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Gấu chó Noel ở khu vực nào?",
+          "options": [
+            "Khu chuồng gấu",
+            "Khu hổ mới",
+            "Chuồng hà mã"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "raccoon",
+      "slug": "gau-meo",
+      "code": "#06",
+      "name": "Gấu mèo (Tai Nơ)",
+      "zone": "Bát giác cây chòi",
+      "funFact": "Hệ lười sang chảnh — chuyên nằm ngửa chill trên cành cây cao",
+      "tintName": "xanh baby",
+      "pastel": "#CFE8FA",
+      "accent": "#2E78B5",
+      "glow": "rgba(207, 232, 250, 0.72)",
+      "cardArt": "assets/cards/art/gau-meo.webp",
+      "introVideo": "intro-anim/rp.mp4",
+      "mapPin": {
+        "x": 70,
+        "y": 58,
+        "routeStep": 6
+      },
+      "quiz": [
+        {
+          "q": "Tư thế ngủ thương hiệu của Gấu mèo Tai Nơ?",
+          "options": [
+            "Nằm ngửa trên cành cây cao",
+            "Đứng một chân",
+            "Luân phiên đứng gác"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Gấu mèo ở Bát giác cây chòi tên gì?",
+          "options": [
+            "Tai Nơ",
+            "Văn Mai",
+            "Dzít"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Tìm Gấu mèo Tai Nơ ở đâu?",
+          "options": [
+            "Bát giác cây chòi",
+            "Vườn hồng hạc",
+            "Chuồng ngựa lùn"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "rhino",
+      "slug": "te-giac-trang",
+      "code": "#07",
+      "name": "Tê giác trắng (Văn Bi, Thị Bo)",
+      "zone": "Chuồng tê giác",
+      "funFact": "\"Hiền mà nặng ký\"; khung giờ ăn T7–CN lúc 14h",
+      "tintName": "lavender nhạt",
+      "pastel": "#E2DAF5",
+      "accent": "#6A4FB3",
+      "glow": "rgba(226, 218, 245, 0.72)",
+      "cardArt": "assets/cards/art/te-giac-trang.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 79,
+        "y": 31,
+        "routeStep": 7
+      },
+      "quiz": [
+        {
+          "q": "Cặp đôi Tê giác trắng tên là gì?",
+          "options": [
+            "Văn Bi, Thị Bo",
+            "Thái, Lan",
+            "Dương, Hảo"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Giờ ăn của Tê giác trắng diễn ra lúc nào?",
+          "options": [
+            "T7–CN lúc 14h",
+            "Mỗi ngày lúc 9h–9h15",
+            "T7–CN lúc 15h"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Câu miêu tả chuẩn nhất về Văn Bi & Thị Bo?",
+          "options": [
+            "\"Hiền mà nặng ký\"",
+            "\"Vệ sĩ sa mạc\"",
+            "\"Nhân chứng sống\""
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "tiger",
+      "slug": "ho-vang",
+      "code": "#08",
+      "name": "Hổ Bengal vàng (Mi–Xám)",
+      "zone": "Khu hổ mới",
+      "funFact": "Hổ Xám gạ kèo kéo co với khách vào T7 tuần 1 & 3",
+      "tintName": "cam đào",
+      "pastel": "#FFD5C2",
+      "accent": "#D95326",
+      "glow": "rgba(255, 213, 194, 0.74)",
+      "cardArt": "assets/cards/art/ho-vang.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 13,
+        "y": 20,
+        "routeStep": 8
+      },
+      "quiz": [
+        {
+          "q": "Hổ Xám chơi trò gì với khách vào T7 tuần 1 & 3?",
+          "options": [
+            "Chơi kéo co",
+            "Đánh răng",
+            "Đi diễu hành"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Kèo kéo co cùng Hổ Xám diễn ra khi nào?",
+          "options": [
+            "T7 tuần 1 & 3",
+            "CN tuần 2 & 4",
+            "Mỗi ngày lúc 9h"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hổ Bengal vàng (Mi–Xám) ở khu nào?",
+          "options": [
+            "Khu hổ mới",
+            "Khu chuồng gấu",
+            "Vườn thú thân thiện"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Cặp Hổ Bengal vàng ở Khu hổ mới tên gì?",
+          "options": [
+            "Mi – Xám",
+            "Văn Bi – Thị Bo",
+            "Thảo Em – Thái Anh"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "gibbon",
+      "slug": "vuon-ma-vang",
+      "code": "#09",
+      "name": "Vượn má vàng (Diễng Diễng)",
+      "zone": "Đảo vượn, hồ sen",
+      "funFact": "Ca sĩ buổi sáng — giờ ăn mỗi ngày 9h–9h15",
+      "tintName": "xanh lá nhạt",
+      "pastel": "#D5EED1",
+      "accent": "#3C8C40",
+      "glow": "rgba(213, 238, 209, 0.72)",
+      "cardArt": "assets/cards/art/vuon-ma-vang.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 18,
+        "y": 26,
+        "routeStep": 9
+      },
+      "quiz": [
+        {
+          "q": "Khung giờ ăn của Vượn má vàng Diễng Diễng?",
+          "options": [
+            "Mỗi ngày 9h–9h15",
+            "T7–CN 14h",
+            "T7–CN 15h"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Vượn má vàng Diễng Diễng ở khu vực nào?",
+          "options": [
+            "Đảo vượn, hồ sen",
+            "Bát giác cây chòi",
+            "Vườn hồng hạc"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Vượn má vàng ở Đảo vượn, hồ sen tên gì?",
+          "options": [
+            "Diễng Diễng",
+            "Tai Nơ",
+            "Noel"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "flamingo",
+      "slug": "hong-hac",
+      "code": "#10",
+      "name": "Hồng hạc",
+      "zone": "Vườn hồng hạc",
+      "funFact": "Visual trắng phớt hồng, đứng 1 chân giữ thăng bằng đỉnh",
+      "tintName": "hồng sữa",
+      "pastel": "#FFE0E9",
+      "accent": "#D44C7A",
+      "glow": "rgba(255, 224, 233, 0.74)",
+      "cardArt": "assets/cards/art/hong-hac.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 46,
+        "y": 43,
+        "routeStep": 10
+      },
+      "quiz": [
+        {
+          "q": "Dáng đứng thương hiệu của Hồng hạc là gì?",
+          "options": [
+            "Đứng một chân",
+            "Nằm ngửa trên cành cây",
+            "Luân phiên đứng gác"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Bộ lông của Hồng hạc tại đây có màu gì?",
+          "options": [
+            "Trắng phớt hồng",
+            "Vàng sọc đen",
+            "Xanh ngọc bích"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Check-in cùng Hồng hạc ở khu vực nào?",
+          "options": [
+            "Vườn hồng hạc",
+            "Vườn cá sấu",
+            "Khu bò sát"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "peafowl",
+      "slug": "cong",
+      "code": "#11",
+      "name": "Công Ấn",
+      "zone": "Vườn hồng hạc",
+      "funFact": "Flex đuôi xòe dài tới 1,5m mỗi mùa sinh sản",
+      "tintName": "xanh ngọc nhạt",
+      "pastel": "#C9EFE8",
+      "accent": "#1E8A7A",
+      "glow": "rgba(201, 239, 232, 0.72)",
+      "cardArt": "assets/cards/art/cong.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 54,
+        "y": 38,
+        "routeStep": 11
+      },
+      "quiz": [
+        {
+          "q": "Vào mùa sinh sản, đuôi Công Ấn xòe dài tới bao nhiêu?",
+          "options": [
+            "Tới 1,5m",
+            "Tới 5m",
+            "Tới 10cm"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Công Ấn sống chung ở khu vực nào?",
+          "options": [
+            "Vườn hồng hạc",
+            "Chuồng voi, ven sông",
+            "Khu chuồng gấu"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Khi nào Công Ấn xòe bộ đuôi 1,5m?",
+          "options": [
+            "Mùa sinh sản",
+            "Khi đi ngủ",
+            "Khi lặn dưới nước"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "crocodile",
+      "slug": "ca-sau",
+      "code": "#12",
+      "name": "Cá sấu",
+      "zone": "Vườn cá sấu",
+      "funFact": "Hệ trầm tính; khung giờ cho ăn T7–CN 14h–14h15",
+      "tintName": "xanh rêu nhạt",
+      "pastel": "#DCE8C8",
+      "accent": "#5A7D2C",
+      "glow": "rgba(220, 232, 200, 0.72)",
+      "cardArt": "assets/cards/art/ca-sau.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 13.5,
+        "y": 30,
+        "routeStep": 12
+      },
+      "quiz": [
+        {
+          "q": "Giờ cho Cá sấu ăn diễn ra vào khung giờ nào?",
+          "options": [
+            "T7–CN 14h–14h15",
+            "Mỗi ngày 9h–9h15",
+            "T7–CN 15h"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Cá sấu ở khu vực nào?",
+          "options": [
+            "Vườn cá sấu",
+            "Vườn thú thân thiện",
+            "Đảo vượn, hồ sen"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "14h–14h15 ngày T7–CN ở Vườn cá sấu có hoạt động gì?",
+          "options": [
+            "Cho cá sấu ăn",
+            "Cắt tỉa bờm",
+            "Chơi kéo co"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "tortoise",
+      "slug": "rua-sulcata",
+      "code": "#13",
+      "name": "Rùa Sulcata",
+      "zone": "Khu bò sát",
+      "funFact": "Idol Zoobiz đi catwalk CN tuần 2 & 4",
+      "tintName": "be cát",
+      "pastel": "#EFE3C8",
+      "accent": "#9C6F32",
+      "glow": "rgba(239, 227, 200, 0.72)",
+      "cardArt": "assets/cards/art/rua-sulcata.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 81,
+        "y": 60,
+        "routeStep": 13
+      },
+      "quiz": [
+        {
+          "q": "Lịch trình của Rùa Sulcata vào CN tuần 2 & 4 là gì?",
+          "options": [
+            "Diễu hành Idol Zoobiz",
+            "Chơi kéo co",
+            "Đánh răng chiều cuối tuần"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Show diễu hành Idol Zoobiz diễn ra vào ngày nào?",
+          "options": [
+            "CN tuần 2 & 4",
+            "T7 tuần 1 & 3",
+            "Mỗi sáng thứ Hai"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Rùa Sulcata ở khu vực nào?",
+          "options": [
+            "Khu bò sát",
+            "Chuồng ngựa lùn",
+            "Bát giác cây chòi"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "pony",
+      "slug": "ngua-lun",
+      "code": "#14",
+      "name": "Ngựa lùn (Văn Mai)",
+      "zone": "Chuồng ngựa lùn",
+      "funFact": "Được tạo kiểu, tỉa bờm bảnh bao trước mỗi dịp lễ Tết",
+      "tintName": "tím lilac",
+      "pastel": "#E9D6F5",
+      "accent": "#8246AD",
+      "glow": "rgba(233, 214, 245, 0.72)",
+      "cardArt": "assets/cards/art/ngua-lun.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 23,
+        "y": 17,
+        "routeStep": 14
+      },
+      "quiz": [
+        {
+          "q": "Ngựa lùn Văn Mai làm đẹp kiểu gì trước lễ Tết?",
+          "options": [
+            "Được cắt tỉa bờm",
+            "Được đánh răng",
+            "Được đeo kính râm"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Ngựa lùn ở Chuồng ngựa lùn tên là gì?",
+          "options": [
+            "Văn Mai",
+            "Tai Nơ",
+            "Diễng Diễng"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Ngựa lùn Văn Mai ở khu vực nào?",
+          "options": [
+            "Chuồng ngựa lùn",
+            "Chuồng HCC",
+            "Chuồng tê giác"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "pygmyhippo",
+      "slug": "ha-ma-lun",
+      "code": "#15",
+      "name": "Hà mã lùn (Dzít)",
+      "zone": "Chuồng hà mã",
+      "funFact": "Dzít 35 tuổi — có lịch spa đánh răng T7–CN lúc 15h",
+      "tintName": "xanh nước biển nhạt",
+      "pastel": "#CBE6F7",
+      "accent": "#236FA3",
+      "glow": "rgba(203, 230, 247, 0.74)",
+      "cardArt": "assets/cards/art/ha-ma-lun.webp",
+      "introVideo": "intro-anim/tiger_v2_trim.mp4",
+      "mapPin": {
+        "x": 30,
+        "y": 45,
+        "routeStep": 15
+      },
+      "quiz": [
+        {
+          "q": "15h T7–CN hàng tuần, Hà mã lùn Dzít có lịch làm gì?",
+          "options": [
+            "Được đánh răng",
+            "Được cắt tỉa bờm",
+            "Chơi kéo co"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hà mã lùn Dzít năm nay bao nhiêu tuổi?",
+          "options": [
+            "35 tuổi",
+            "66–67 tuổi",
+            "10 tuổi"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Hà mã lùn Dzít sống ở đâu?",
+          "options": [
+            "Chuồng hà mã",
+            "Vườn cá sấu",
+            "Đảo vượn, hồ sen"
+          ],
+          "answer": 0
+        }
+      ]
+    }
+  ]
+};

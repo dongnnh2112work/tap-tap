@@ -1,0 +1,470 @@
+/* ==========================================================================
+   Tap Tap — Reusable Card Motion v7 Component Styles
+   Uses tightly-cropped art-only images (object-fit: cover), HTML name,
+   transparent logo on card back, and motion-v7 3D tilt + holo + masks.
+   ========================================================================== */
+
+.tt-card-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1100px;
+  -webkit-perspective: 1100px;
+  z-index: 5;
+  --glare-x: 50%;
+  --glare-y: 50%;
+  --spec-x: 50%;
+  --spec-y: 50%;
+  --spec-angle: 126deg;
+  --holo-x: 50%;
+  --holo-y: 50%;
+  --holo-angle: 118deg;
+  --spec-opacity: 0;
+  --holo-opacity: 0;
+  --glare-opacity: 0;
+  --shadow-x: 0px;
+  --shadow-y: 20px;
+  --shadow-blur: 34px;
+}
+
+/* NFC Ripple Origin Layer */
+.tt-card-stage .nfc-ripple-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 240px;
+  height: 240px;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.tt-card-stage .nfc-ring {
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 2.5px solid var(--theme-accent, #d97724);
+  background: radial-gradient(circle, var(--theme-glow, rgba(244, 232, 148, 0.65)) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* Confetti particles around card reveal */
+.tt-card-stage .particles-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tt-card-stage .mote {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--theme-accent, #d97724);
+  opacity: 0;
+}
+
+/* 3D Card Wrapper */
+.tt-card-stage .card-fly-wrapper {
+  position: relative;
+  z-index: 4;
+  /* Card proportions sized so the art window matches the 1237x1607 art exactly (full art, no crop) */
+  aspect-ratio: 678 / 1000;
+  height: var(--card-height, 340px);
+  width: auto;
+  max-width: 84vw;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: none;
+}
+
+.tt-card-stage .card-fly-wrapper:active {
+  cursor: grabbing;
+}
+
+/* Dynamic Ground Shadow */
+.tt-card-stage .card-ground-shadow {
+  position: absolute;
+  inset: 5% 6%;
+  border-radius: 26px;
+  background: rgba(36, 25, 18, 0.24);
+  filter: blur(var(--shadow-blur, 34px));
+  transform: translate(var(--shadow-x, 0px), var(--shadow-y, 20px)) scale(0.95);
+  transition: background 0.3s ease;
+  pointer-events: none;
+}
+
+/* v5 FIX: flat stage isolates the tilting card from the ground shadow's 3D plane */
+.tt-card-stage .card-tilt-stage {
+  position: absolute;
+  inset: 0;
+  transform-style: flat;
+  -webkit-transform-style: flat;
+  perspective: 1100px;
+  -webkit-perspective: 1100px;
+  isolation: isolate;
+}
+
+/* Card 3D Rotator */
+.tt-card-stage .card-rotator {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Physical Card Edge Thickness */
+.tt-card-stage .card-edge-plate {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: #e6dac6;
+  transform: translateZ(-2px);
+  pointer-events: none;
+}
+
+/* Shared Face Styles (Front & Back) */
+.tt-card-stage .card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: flat;
+  -webkit-transform-style: flat;
+  isolation: isolate;
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: #fffdf8;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.92),
+    inset 0 0 0 3px rgba(44, 34, 30, 0.06),
+    0 2px 6px rgba(44, 34, 30, 0.08);
+  overflow: hidden;
+  --mask-feather: 5%;
+  --mf-text-top: 81%;
+  --mb-head-end: 24%;
+  --mb-fact-top: 32%;
+  --mb-fact-end: 82%;
+  --mb-foot-top: 94%;
+}
+
+/* ================= FRONT FACE ================= */
+.tt-card-stage .card-face-front {
+  transform: rotateY(0deg) translateZ(2px);
+  background: #ffffff;
+}
+
+/* Layer 1: Tightly cropped art-only image inside the recessed window */
+.tt-card-stage .card-art-viewport {
+  position: absolute;
+  left: 6.4%;
+  right: 6.4%;
+  top: 5.2%;
+  bottom: 18%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--theme-pastel, #f4e894);
+  transform: translateZ(0px);
+}
+
+.tt-card-stage .card-art-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+  object-position: center bottom;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0px, 0px, 0px) scale(1);
+}
+
+/* Layer 2: Tactile Matte Paper Cutout Frame & Inner Bevel Window */
+.tt-card-stage .card-paper-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  will-change: transform;
+  box-shadow:
+    inset 0 0 0 11px #ffffff,
+    inset 0 0 0 12.5px rgba(44, 34, 30, 0.06);
+}
+
+.tt-card-stage .art-window-bevel {
+  position: absolute;
+  left: 6.4%;
+  right: 6.4%;
+  top: 5.2%;
+  bottom: 18%;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow:
+    inset 0 2px 6px rgba(44, 34, 30, 0.10),
+    inset 0 0 0 1px rgba(44, 34, 30, 0.06),
+    0 0 0 18px #ffffff;
+  transition: box-shadow 0.2s ease;
+}
+
+.tt-card-stage .card-top-stamp {
+  position: absolute;
+  top: 12px;
+  right: 11%;
+  background: rgba(255, 253, 248, 0.88);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--ink-dark, #2c221e);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Layer 3: Bottom Nameplate under the art */
+.tt-card-stage .card-caption-plate {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 12px 6px;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 4;
+}
+
+.tt-card-stage .card-series-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--theme-pastel, #f4e894);
+  color: var(--ink-dark, #2c221e);
+  font-size: 0.6rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  max-width: 92%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tt-card-stage .card-animal-name {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: clamp(0.86rem, 3.6vw, 1.08rem);
+  line-height: 1.15;
+  color: var(--ink-dark, #2c221e);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 96%;
+  text-align: center;
+}
+
+/* ================= BACK FACE (180° FLIP) ================= */
+.tt-card-stage .card-face-back {
+  transform: rotateY(180deg) translateZ(2px);
+  background: linear-gradient(165deg, #fffaf0 0%, #faf1de 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 18px;
+  text-align: center;
+}
+
+.tt-card-stage .back-ornament-frame {
+  position: absolute;
+  inset: 10px;
+  border-radius: 15px;
+  border: 1.8px dashed rgba(217, 119, 36, 0.24);
+  pointer-events: none;
+}
+
+.tt-card-stage .back-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Transparent logo on card back — NO box, border, or background */
+.tt-card-stage .back-logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.tt-card-stage .back-fact-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 253, 248, 0.94);
+  border: 1.5px solid rgba(44, 34, 30, 0.08);
+  border-radius: 16px;
+  padding: 14px 14px;
+  box-shadow: 0 6px 16px rgba(44, 34, 30, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.tt-card-stage .back-animal-title {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 1.04rem;
+  color: var(--ink-dark, #2c221e);
+  line-height: 1.15;
+}
+
+.tt-card-stage .back-fact-text {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #463831;
+  font-weight: 600;
+}
+
+/* ================= POKEMON TCG POCKET STYLE REFINED HOLO & GLARE ================= */
+.tt-card-stage .card-holo-specular {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 10;
+  background-image: linear-gradient(
+    var(--spec-angle, 126deg),
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 45%,
+    rgba(255, 255, 252, 0.05) 46.6%,
+    rgba(255, 255, 252, 0.22) 47.8%,
+    rgba(255, 255, 255, 0.58) 48.9%,
+    rgba(255, 255, 255, 0.92) 49.6%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.92) 50.4%,
+    rgba(255, 255, 255, 0.58) 51.1%,
+    rgba(255, 255, 252, 0.22) 52.2%,
+    rgba(255, 255, 252, 0.05) 53.4%,
+    rgba(255, 255, 255, 0) 55%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 280% 280%;
+  background-position: var(--spec-x, 50%) var(--spec-y, 50%);
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: var(--spec-opacity, 0);
+  will-change: background-position, opacity;
+}
+
+.tt-card-stage .card-holo-rainbow {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 11;
+  background-image: linear-gradient(
+    var(--holo-angle, 118deg),
+    rgba(255, 150, 195, 0) 0%,
+    rgba(255, 150, 195, 0) 20%,
+    rgba(255, 155, 198, 0.28) 27%,
+    rgba(255, 214, 138, 0.68) 35%,
+    rgba(152, 244, 200, 0.82) 44%,
+    rgba(138, 212, 255, 0.88) 50%,
+    rgba(196, 162, 255, 0.82) 56%,
+    rgba(255, 166, 210, 0.68) 65%,
+    rgba(255, 220, 150, 0.28) 73%,
+    rgba(160, 238, 215, 0) 80%,
+    rgba(160, 238, 215, 0) 100%
+  );
+  background-size: 280% 280%;
+  background-position: var(--holo-x, 50%) var(--holo-y, 50%);
+  background-repeat: no-repeat;
+  mix-blend-mode: color-dodge;
+  opacity: var(--holo-opacity, 0.02);
+  will-change: background-position, opacity;
+}
+
+.tt-card-stage .card-holo-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 12;
+  background-image: radial-gradient(
+    farthest-corner circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(255, 253, 246, 0.46) 18%,
+    rgba(255, 251, 240, 0.18) 38%,
+    rgba(255, 249, 235, 0.04) 58%,
+    rgba(255, 255, 255, 0) 78%
+  );
+  background-repeat: no-repeat;
+  mix-blend-mode: soft-light;
+  opacity: var(--glare-opacity, 0.04);
+  will-change: opacity;
+}
+
+/* v7-final: text-safe holo masks */
+.tt-card-stage .card-face-front .card-holo-specular,
+.tt-card-stage .card-face-front .card-holo-glare,
+.tt-card-stage .card-face-front .card-holo-rainbow {
+  --mask-text: rgba(0,0,0,0.12);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 calc(var(--mf-text-top) - var(--mask-feather) * 2), var(--mask-text) var(--mf-text-top), var(--mask-text) 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 calc(var(--mf-text-top) - var(--mask-feather) * 2), var(--mask-text) var(--mf-text-top), var(--mask-text) 100%);
+}
+.tt-card-stage .card-face-front .card-holo-rainbow {
+  --mask-text: rgba(0,0,0,0.30);
+}
+.tt-card-stage .card-face-back .card-holo-specular,
+.tt-card-stage .card-face-back .card-holo-glare,
+.tt-card-stage .card-face-back .card-holo-rainbow {
+  --mask-text: rgba(0,0,0,0.30);
+  --mb-mask: linear-gradient(180deg,
+    var(--mask-text) 0%,
+    var(--mask-text) var(--mb-head-end),
+    #000 calc(var(--mb-head-end) + var(--mask-feather)),
+    #000 calc(var(--mb-fact-top) - var(--mask-feather)),
+    var(--mask-text) var(--mb-fact-top),
+    var(--mask-text) var(--mb-fact-end),
+    #000 calc(var(--mb-fact-end) + var(--mask-feather)),
+    #000 100%);
+  -webkit-mask-image: var(--mb-mask);
+  mask-image: var(--mb-mask);
+}
+
+.tt-card-stage .card-paper-texture {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0.14;
+  background-image:
+    radial-gradient(rgba(92, 70, 50, 0.14) 0.75px, transparent 0),
+    radial-gradient(rgba(92, 70, 50, 0.09) 0.75px, transparent 0);
+  background-size: 12px 12px;
+  background-position: 0 0, 6px 6px;
+}
